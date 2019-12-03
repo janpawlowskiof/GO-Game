@@ -28,6 +28,7 @@ public class ConnectionGreeter extends Thread {
                 Socket socket = serverSocket.accept();
                 Lobby.getInstance().addPlayer(newPlayer);
                 newPlayer.establishConnection(new TcpConnectionManager(socket));
+                System.out.println("Past establishing conection");
 
             } catch (IOException e) {
                 e.printStackTrace();

@@ -32,7 +32,7 @@ public class TcpConnectionManager implements IConnectionManager {
         }
 
         @Override
-        public void start(){
+        public void run(){
 
             BufferedReader inBuf = new BufferedReader( new InputStreamReader(inputStream) );
             while(!exitFlag){
