@@ -1,5 +1,5 @@
 package juanolek;
 
 public interface IPlayerStrategy {
-    public void handleMessage(Message message);
+    public void handleMessage(Message message, Player sender);
 }

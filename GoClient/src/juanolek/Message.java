@@ -13,7 +13,6 @@ public class Message {
     public String getHeader(){
         return header;
     }
-
     public String getValue(){
         return value;
     }

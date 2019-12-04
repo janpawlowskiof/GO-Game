@@ -28,7 +28,6 @@ public class TcpConnectionManager implements IConnectionManager {
         public TcpListener(IMessageReceiver receiver){
             this.receiver = receiver;
         }
-
         @Override
         public void run(){
             while(!exitFlag){

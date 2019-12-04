@@ -1,15 +1,27 @@
 package juanolek;
 
+import java.util.UUID;
+
 public class Player implements IMessageReceiver{
 
     private IConnectionManager connectionManager;
     private IPlayerStrategy playerStrategy;
+    private final UUID uuid;
 
-    public void establishConnection(IConnectionManager connectionManager){
-        System.out.println("Player connected!");
-
+    public Player(IConnectionManager connectionManager){
         this.connectionManager = connectionManager;
+        this.uuid = UUID.randomUUID();
+    }
+
+    public UUID getUuid(){
+        return uuid;
+    }
+
+    public void startReceivingMessages(){
         this.connectionManager.startListening(this);
+    }
+    public void sendMessage(Message message){
+        connectionManager.sendMessage(message);
     }
 
     public void setPlayerStrategy(IPlayerStrategy playerStrategy){
@@ -23,6 +35,6 @@ public class Player implements IMessageReceiver{
             return;
         }
 
-        playerStrategy.handleMessage(message);
+        playerStrategy.handleMessage(message, this);
     }
 }

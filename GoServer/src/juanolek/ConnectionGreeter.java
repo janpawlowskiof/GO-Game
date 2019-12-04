@@ -12,7 +12,6 @@ public class ConnectionGreeter extends Thread {
 
     @Override
     public void run(){
-
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -24,10 +23,10 @@ public class ConnectionGreeter extends Thread {
         while(!exitFlag){
             try {
                 System.out.println("Waiting for players...");
-                Player newPlayer = new Player();
                 Socket socket = serverSocket.accept();
+                Player newPlayer = new Player(new TcpConnectionManager(socket));
                 Lobby.getInstance().addPlayer(newPlayer);
-                newPlayer.establishConnection(new TcpConnectionManager(socket));
+                newPlayer.startReceivingMessages();
                 System.out.println("Past establishing conection");
 
             } catch (IOException e) {
