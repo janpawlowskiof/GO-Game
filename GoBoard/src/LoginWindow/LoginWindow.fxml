@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LoginWindow.ControllerLogin">
    <children>
       <VBox layoutX="74.0" layoutY="47.0" prefHeight="239.0" prefWidth="252.0">
          <children>
@@ -38,12 +38,13 @@
                   <Insets left="30.0" right="30.0" />
                </VBox.margin>
             </HBox>
-            <Button alignment="TOP_LEFT" mnemonicParsing="false" text="Połącz">
+            <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#buttonPressed" text="Połącz">
                <VBox.margin>
                   <Insets left="100.0" />
                </VBox.margin>
             </Button>
          </children>
       </VBox>
+      <Label layoutX="171.0" layoutY="34.0" text="Log in Pane" />
    </children>
 </Pane>
