@@ -1,5 +1,6 @@
 package GoBoard;
 
+import LoginWindow.ControllerLogin;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -14,11 +15,9 @@ import javafx.stage.Stage;
         private Group root = new Group();
         @Override
         public void start(Stage primaryStage) throws Exception{
-            //Parent root1 = FXMLLoader.load(getClass().getResource("sample.fxml"));
-
+            //Parent root1 = FXMLLoader.load(getClass().getResource("/LoginWindow/LoginWindow.fxml"));
             primaryStage.setTitle("Hello World");
             primaryStage.setScene(new Scene(root, 500, 500));
-
             for(int i=0 ; i < 18 ; i++){
                 for(int j=0 ; j < 18 ; j++){
 
