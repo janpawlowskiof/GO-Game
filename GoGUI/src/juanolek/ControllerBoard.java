@@ -12,37 +12,35 @@ public class ControllerBoard  {
     private final int RectWidth = 26;
     private final int RectHeight = 26;
     private final int Radius = 10;
-    int counter = 0;
+    double currX;
+    double currY;
 
-    private void drawCircle(int x,int y) {
+    private void drawCircle(int x,int y, Color color ) {
 
 
-        if(counter%2 ==0) {
-            Circle circle = new Circle(Radius);
-            circle.setFill(Color.BLACK);
-
-            Board.add(circle, x, y);
-        }
-        else{
 
             Circle circle = new Circle(Radius);
-            circle.setFill(Color.RED);
+            circle.setFill(color);
 
             Board.add(circle, x, y);
 
-        }
-        counter++;
+
+
     }
 
     @FXML
     private void Pressed(MouseEvent event){
-         double currX;
-         double currY;
 
          currX = (event.getX()/RectWidth);
          currY = (event.getY()/RectHeight);
+         drawCircle((int)currX,(int)currY,Color.BLACK);
+         fieldClicked((int)currX,(int)currY);
+    }
 
-         drawCircle((int)currX,(int)currY);
+
+    private void fieldClicked(int x, int y){
+
+        System.out.println("Kliknieto na: "+ x+" "+y);
 
     }
 
