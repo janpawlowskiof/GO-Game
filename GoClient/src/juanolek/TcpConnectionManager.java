@@ -59,7 +59,6 @@ public class TcpConnectionManager implements IConnectionManager {
 
     @Override
     public void sendMessage(Message message) {
-        String value = "test";
         try {
             bufferedWriter.write(message.getHeader() + '\t' + message.getValue());
             bufferedWriter.newLine();

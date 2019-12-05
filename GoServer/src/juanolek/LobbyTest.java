@@ -1,6 +1,6 @@
 package juanolek;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 class LobbyTest {
 
@@ -13,7 +13,7 @@ class LobbyTest {
         public void sendMessage(Message message){}
     }
 
-    @org.junit.jupiter.api.Test
+    @org.junit.Test
     void testAddPlayer() {
         Player testPlayer = new PlayerMock();
         assertFalse(Lobby.getInstance().getLobbyPlayers().contains(testPlayer));
@@ -21,7 +21,7 @@ class LobbyTest {
         assertTrue(Lobby.getInstance().getLobbyPlayers().contains(testPlayer));
     }
 
-    @org.junit.jupiter.api.Test
+    @org.junit.Test
     void testCreateGame() {
         Player testPlayer = new PlayerMock();
         int gamesCount = Lobby.getInstance().getGames().size();
@@ -30,7 +30,7 @@ class LobbyTest {
         assertFalse(Lobby.getInstance().getLobbyPlayers().contains(testPlayer));
     }
 
-    @org.junit.jupiter.api.Test
+    @org.junit.Test
     void testRemovePlayer() {
         Player testPlayer = new PlayerMock();
         assertFalse(Lobby.getInstance().getLobbyPlayers().contains(testPlayer));
