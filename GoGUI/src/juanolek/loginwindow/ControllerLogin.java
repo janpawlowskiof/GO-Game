@@ -1,4 +1,4 @@
-package LoginWindow;
+package juanolek.loginwindow;
 
 import javafx.fxml.FXML;
 

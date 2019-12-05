@@ -11,7 +11,7 @@ public class LobbyPlayerStrategy implements IPlayerStrategy {
             sender.sendMessage(Lobby.getInstance().getLobbyPlayersMessage());
         }
         else if(message.getHeader().equals("getGames")){
-            sender.sendMessage(Lobby.getInstance().getGames());
+            sender.sendMessage(Lobby.getInstance().getGamesMessage());
         }
         else if(message.getHeader().equals("createGame")){
             Lobby.getInstance().createGame(sender);

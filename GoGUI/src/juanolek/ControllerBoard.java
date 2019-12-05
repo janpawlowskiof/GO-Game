@@ -1,4 +1,4 @@
-package GoBoard;
+package juanolek;
 
 public class ControllerBoard {
 

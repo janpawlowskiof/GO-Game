@@ -48,6 +48,15 @@ public class Lobby {
         }
     }
 
+
+    public ArrayList<Player> getLobbyPlayers(){
+        return players;
+    }
+
+    public ArrayList<Game> getGames(){
+        return games;
+    }
+
     public synchronized Message getLobbyPlayersMessage() {
         StringBuilder stringBuilder = new StringBuilder();
         boolean first = true;
@@ -60,7 +69,7 @@ public class Lobby {
         return new Message("playersInfo", stringBuilder.toString());
     }
 
-    public synchronized Message getGames() {
+    public synchronized Message getGamesMessage() {
         StringBuilder stringBuilder = new StringBuilder();
         boolean first = true;
         for(Game game : games){

@@ -1,4 +1,4 @@
-package Lobby;
+package juanolek.lobby;
 
 public class lobbyController {
 }
