@@ -31,7 +31,7 @@ public class Main extends Application {
         //function that shows the board
         private void showBoard() throws Exception {
             Parent root1 = FXMLLoader.load(getClass().getResource("/juanolek/Board.fxml"));
-            primaryStage.setScene(new Scene(root1, 700, 500));
+            primaryStage.setScene(new Scene(root1, 700, 550));
             primaryStage.setResizable(false);
             primaryStage.show();
         }

@@ -1,6 +1,8 @@
 package juanolek;
 
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -11,7 +13,7 @@ public class ControllerBoard  {
     @FXML  private GridPane Board = new GridPane();
     private final int RectWidth = 26;
     private final int RectHeight = 26;
-    private final int Radius = 10;
+    private final int Radius = 8;
     double currX;
     double currY;
 
@@ -23,7 +25,8 @@ public class ControllerBoard  {
             circle.setFill(color);
 
             Board.add(circle, x, y);
-
+            Board.setHalignment(circle, HPos.CENTER);
+            Board.setValignment(circle, VPos.CENTER);
 
 
     }
