@@ -1,4 +1,4 @@
-package juanolek;
+package juanolek.client;
 
 import java.io.*;
 import java.net.Socket;
@@ -51,7 +51,6 @@ public class TcpConnectionManager implements IConnectionManager {
         }
     }
 
-
     @Override
     public void disconnect() throws IOException {
         socket.close();
@@ -59,6 +58,7 @@ public class TcpConnectionManager implements IConnectionManager {
 
     @Override
     public void sendMessage(Message message) {
+        System.out.println("Got here!");
         try {
             bufferedWriter.write(message.getHeader() + '\t' + message.getValue());
             bufferedWriter.newLine();

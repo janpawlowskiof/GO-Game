@@ -1,4 +1,4 @@
-package juanolek;
+package juanolek.gui;
 
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;

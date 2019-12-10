@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/G2oGame.iml" filepath="$PROJECT_DIR$/G2oGame.iml" />
       <module fileurl="file://$PROJECT_DIR$/GOJuanolekServer.iml" filepath="$PROJECT_DIR$/GOJuanolekServer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/GoClient/GoClient.iml" filepath="$PROJECT_DIR$/GoClient/GoClient.iml" />
       <module fileurl="file://$PROJECT_DIR$/GoClient/GoCommon.iml" filepath="$PROJECT_DIR$/GoClient/GoCommon.iml" />
       <module fileurl="file://$PROJECT_DIR$/GoGUI/GoGUI.iml" filepath="$PROJECT_DIR$/GoGUI/GoGUI.iml" />
       <module fileurl="file://$PROJECT_DIR$/GoServer/GoServer.iml" filepath="$PROJECT_DIR$/GoServer/GoServer.iml" />

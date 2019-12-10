@@ -1,4 +1,4 @@
-package juanolek;
+package juanolek.client;
 
 import java.io.IOException;
 

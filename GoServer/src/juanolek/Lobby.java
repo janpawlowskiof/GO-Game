@@ -17,6 +17,7 @@ public class Lobby {
     {
         players.add(newPlayer);
         newPlayer.setPlayerStrategy(new LobbyPlayerStrategy());
+        newPlayer.sendMessage(new Message("showlobby", ""));
         newPlayer.sendMessage(new Message("Info", "Welcome in lobby " + newPlayer.getUuid().toString()));
     }
 
@@ -66,7 +67,7 @@ public class Lobby {
             stringBuilder.append(player.getUuid().toString());
             first = false;
         }
-        return new Message("playersInfo", stringBuilder.toString());
+        return new Message("lobbyPlayers", stringBuilder.toString());
     }
 
     public synchronized Message getGamesMessage() {
