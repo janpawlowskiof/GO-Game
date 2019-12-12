@@ -31,10 +31,7 @@ public class BoardPanel extends JPanel {
                         / TILE_SIZE);
 
                 if(checkPoint(col,row)) {
-
                     board.onTileSelected(col, row);
-                    repaint();
-
                 }
                 else System.out.println("nie wolno");
 
@@ -61,25 +58,16 @@ public class BoardPanel extends JPanel {
                     + BORDER_SIZE, TILE_SIZE * N_OF_TILES + BORDER_SIZE);
         }
 
-
         for(Pawn p : pawns){
-
             if(p.getColor() == Color.BLACK){
-
                 g2.setColor(Color.BLACK);
                 g2.fillOval(p.getX()*TILE_SIZE+BORDER_SIZE-CONSTANT,p.getY()*TILE_SIZE+BORDER_SIZE-CONSTANT,30,30);
             }
             else if(p.getColor() == Color.WHITE){
-
-
                 g2.setColor(Color.WHITE);
                 g2.fillOval(p.getX()*TILE_SIZE+BORDER_SIZE-CONSTANT,p.getY()*TILE_SIZE+BORDER_SIZE-CONSTANT,30,30);
-
             }
-
-
         }
-
     }
 
     private boolean checkPoint(int x, int y){

@@ -49,14 +49,14 @@ public class AwtBoard extends ReceiverFrame{
 
         Pawn newBlackPawn = new Pawn(x,y,Color.BLACK);
         boardPanel.getPawns().add(newBlackPawn);
-
+        repaint();
     }
 
     public void setWhitePawn(int x, int y){
 
         Pawn newWhitePawn = new Pawn(x,y,Color.WHITE);
         boardPanel.getPawns().add(newWhitePawn);
-
+        repaint();
     }
 
     public void clearPawn(int x, int y){
@@ -72,13 +72,22 @@ public class AwtBoard extends ReceiverFrame{
     }
 
     public void onTileSelected(int x, int y){
-        System.out.println("Tile " + x + ", " + y + "selected");
+        guiManager.sendMessage(new Message("tileselected", x+","+y));
     }
 
 
     @Override
     public void receive(Message message) {
-        System.out.println("AwtBoard rec: " + message);
+        if(message.getHeader().equals("setwhitepawn")){
+            int x = Integer.parseInt(message.getValue().split(",")[0]);
+            int y = Integer.parseInt(message.getValue().split(",")[1]);
+            setWhitePawn(x, y);
+        }
+        else if(message.getHeader().equals("setblackpawn")){
+            int x = Integer.parseInt(message.getValue().split(",")[0]);
+            int y = Integer.parseInt(message.getValue().split(",")[1]);
+            setBlackPawn(x, y);
+        }
     }
 
 
