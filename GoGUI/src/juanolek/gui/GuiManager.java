@@ -61,9 +61,10 @@ public class GuiManager implements IMessageReceiver {
     }
 
     public void sendMessage(Message message){
-        System.out.println("Get to GM...");
-        if(client != null)
+        if(client != null) {
             client.sendMessage(message);
+            System.out.println("Sending Message " + message.toString());
+        }
     }
 
     public void connect(String ip, int port){

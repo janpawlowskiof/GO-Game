@@ -1,5 +1,8 @@
 package juanolek;
 
+import juanolek.exceptions.GameNotExistingException;
+import juanolek.exceptions.NoSlotsAvailableException;
+
 public class LobbyPlayerStrategy implements IPlayerStrategy {
 
     @Override
@@ -17,7 +20,13 @@ public class LobbyPlayerStrategy implements IPlayerStrategy {
             Lobby.getInstance().createGame(sender);
         }
         else if(message.getHeader().equals("joingame")){
-            Lobby.getInstance().addPlayerToGame(sender, message.getValue());
+            try {
+                Lobby.getInstance().addPlayerToGame(sender, message.getValue());
+            } catch (GameNotExistingException e) {
+                sender.sendMessage(new Message("Info", "Game" + message.getValue() + "does not exist"));
+            } catch (NoSlotsAvailableException e) {
+                sender.sendMessage(new Message("Info", "There are no empty slots available in that game"));
+            }
         }
         else{
             System.out.println("Nieznany header " + message.getHeader());

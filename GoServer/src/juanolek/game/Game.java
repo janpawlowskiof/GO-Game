@@ -4,14 +4,18 @@ import juanolek.GamePlayerStrategy;
 import juanolek.Lobby;
 import juanolek.Message;
 import juanolek.Player;
+import juanolek.exceptions.InvalidMoveException;
 import juanolek.exceptions.NoSlotsAvailableException;
+import juanolek.exceptions.TrashDataException;
 
+import java.util.List;
 import java.util.UUID;
 
 public class Game{
 
     private Player playerWhite = null;
     private Player playerBlack = null;
+    private GameLogic gameLogic;
     private UUID uuid;
     private int size;
 
@@ -23,6 +27,43 @@ public class Game{
         } catch (NoSlotsAvailableException e) {
             System.out.println("What a Terrible Failure Adding a player to a fresh game session");
         }
+        this.gameLogic = new GameLogic(size);
+    }
+
+    public void setPawn(int x, int y, Player player){
+        GamePawnType playerType = null;
+        if(player == playerWhite)
+            playerType = GamePawnType.White;
+        else if(player == playerBlack){
+            playerType = GamePawnType.Black;
+        }
+        else{
+            System.out.println("Player not in game session tried moving pawn! Terminating server");
+            //close
+        }
+        
+        try {
+            List<GameBoardChange> boardChanges = gameLogic.setPawn(x, y, playerType);
+            for(GameBoardChange boardChange : boardChanges){
+                if(boardChange.getChangeType() == GameBoardChange.ChangeType.Add){
+                    Message message = new Message(boardChange.getPawnType() == GamePawnType.White ? "setWhitePawn" : "setBlackPawn", x+","+y);
+                    playerWhite.sendMessage(message);
+                    playerBlack.sendMessage(message);
+                }
+                else if(boardChange.getChangeType() == GameBoardChange.ChangeType.Delete){
+                    Message message = new Message("deletePawn", x + "," + y);
+                    playerWhite.sendMessage(message);
+                    playerBlack.sendMessage(message);
+                }
+
+            }
+
+        } catch (InvalidMoveException e) {
+            player.sendMessage(new Message("Info", e.getMessage()));
+        } catch (TrashDataException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void addPlayer(Player player) throws NoSlotsAvailableException{

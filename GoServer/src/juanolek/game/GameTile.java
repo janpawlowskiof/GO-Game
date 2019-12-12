@@ -2,11 +2,7 @@ package juanolek.game;
 
 public class GameTile {
 
-    public Type type = Type.Empty;
+    public GamePawnType type = GamePawnType.Empty;
 
-    public enum Type{
-        White,
-        Black,
-        Empty
-    }
+
 }

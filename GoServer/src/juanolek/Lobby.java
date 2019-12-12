@@ -1,9 +1,11 @@
 package juanolek;
 
+import juanolek.exceptions.GameNotExistingException;
 import juanolek.exceptions.NoSlotsAvailableException;
 import juanolek.game.Game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class Lobby {
@@ -11,12 +13,12 @@ public class Lobby {
     private static Lobby instance = null;
     private Lobby(){}
 
-    private ArrayList<Player> players = new ArrayList<>();
-    private ArrayList<Game> games = new ArrayList<>();
+    private HashMap<UUID, Player> players = new HashMap<>();
+    private HashMap<UUID, Game> games = new HashMap<>();
 
     public synchronized void addPlayer(Player newPlayer)
     {
-        players.add(newPlayer);
+        players.put(newPlayer.getUuid(), newPlayer);
         newPlayer.setPlayerStrategy(new LobbyPlayerStrategy());
         newPlayer.sendMessage(new Message("showlobby", ""));
         newPlayer.sendMessage(new Message("Info", "Welcome in lobby " + newPlayer.getUuid().toString()));
@@ -25,7 +27,7 @@ public class Lobby {
     public synchronized void createGame(Player player){
         removePlayer(player);
         Game newGame = new Game(19, player);
-        games.add(newGame);
+        games.put(newGame.getUuid(), newGame);
     }
 
     public synchronized void removePlayer(Player player){
@@ -36,55 +38,48 @@ public class Lobby {
         games.remove(game);
     }
 
-    public synchronized void addPlayerToGame(Player player, String gameUuid){
-        UUID uuid = UUID.fromString(gameUuid);
-        for(Game game : games){
-            if(game.getUuid().equals(uuid)){
-                try {
-                    game.addPlayer(player);
-                }
-                catch (NoSlotsAvailableException e) {
-                    player.sendMessage(new Message("Info", e.getMessage()));
-                }
-            }
+    public synchronized void addPlayerToGame(Player player, String gameUuid) throws GameNotExistingException, NoSlotsAvailableException {
+        UUID uuid;
+
+        try{
+            uuid = UUID.fromString(gameUuid);
         }
+        catch (Exception ex){
+            throw new GameNotExistingException();
+        }
+
+        Game game = games.get(uuid);
+        if(game == null){
+            throw new GameNotExistingException();
+        }
+        game.addPlayer(player);
     }
 
 
-    public ArrayList<Player> getLobbyPlayers(){
+    public HashMap<UUID, Player> getLobbyPlayers(){
         return players;
     }
 
-    public ArrayList<Game> getGames(){
+    public HashMap<UUID, Game> getGames(){
         return games;
     }
 
     public synchronized Message getLobbyPlayersMessage() {
         StringBuilder stringBuilder = new StringBuilder();
-        boolean first = true;
-        for(Player player : players){
-            if(!first)
-                stringBuilder.append(",");
+        players.forEach((uuid, player) -> {
+            stringBuilder.append(",");
             stringBuilder.append(player.getUuid().toString());
-            first = false;
-        }
-        return new Message("lobbyPlayers", stringBuilder.toString());
+        });
+        return new Message("lobbyPlayers", stringBuilder.toString().substring(1));
     }
 
     public synchronized Message getGamesMessage() {
         StringBuilder stringBuilder = new StringBuilder();
-        boolean first = true;
-        for(Game game : games){
-            if(!first)
-                stringBuilder.append(",");
-
+        games.forEach((uuid, game) -> {
+            stringBuilder.append(",");
             stringBuilder.append(game.getUuid().toString());
-            stringBuilder.append(":");
-            stringBuilder.append(game.getPlayerCount());
-
-            first = false;
-        }
-        return new Message("gamesInfo", stringBuilder.toString());
+        });
+        return new Message("games", stringBuilder.toString().substring(1));
     }
 
     public static synchronized Lobby getInstance(){

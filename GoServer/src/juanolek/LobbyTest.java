@@ -16,9 +16,9 @@ class LobbyTest {
     @org.junit.Test
     void testAddPlayer() {
         Player testPlayer = new PlayerMock();
-        assertFalse(Lobby.getInstance().getLobbyPlayers().contains(testPlayer));
+        assertFalse(Lobby.getInstance().getLobbyPlayers().containsValue(testPlayer));
         Lobby.getInstance().addPlayer(testPlayer);
-        assertTrue(Lobby.getInstance().getLobbyPlayers().contains(testPlayer));
+        assertTrue(Lobby.getInstance().getLobbyPlayers().containsValue(testPlayer));
     }
 
     @org.junit.Test
@@ -27,16 +27,16 @@ class LobbyTest {
         int gamesCount = Lobby.getInstance().getGames().size();
         Lobby.getInstance().createGame(testPlayer);
         assertTrue(Lobby.getInstance().getGames().size() > gamesCount);
-        assertFalse(Lobby.getInstance().getLobbyPlayers().contains(testPlayer));
+        assertFalse(Lobby.getInstance().getLobbyPlayers().containsValue(testPlayer));
     }
 
     @org.junit.Test
     void testRemovePlayer() {
         Player testPlayer = new PlayerMock();
-        assertFalse(Lobby.getInstance().getLobbyPlayers().contains(testPlayer));
+        assertFalse(Lobby.getInstance().getLobbyPlayers().containsValue(testPlayer));
         Lobby.getInstance().addPlayer(testPlayer);
-        assertTrue(Lobby.getInstance().getLobbyPlayers().contains(testPlayer));
+        assertTrue(Lobby.getInstance().getLobbyPlayers().containsValue(testPlayer));
         Lobby.getInstance().removePlayer(testPlayer);
-        assertFalse(Lobby.getInstance().getLobbyPlayers().contains(testPlayer));
+        assertFalse(Lobby.getInstance().getLobbyPlayers().containsValue(testPlayer));
     }
 }

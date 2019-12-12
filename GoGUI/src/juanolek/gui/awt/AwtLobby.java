@@ -40,13 +40,21 @@ public class AwtLobby extends ReceiverFrame {
                 }
             });
             joinButton.setText("Join");
+            joinButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    System.out.println("Join Game clicked...");
+                    if(list.getSelectedItem() != null)
+                        guiManager.sendMessage(new Message("JoinGame", list.getSelectedItem()));
+                }
+            });
             refreshButton.setText("Refresh");
             refreshButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     System.out.println("Refresh clicked...");
-                    System.out.println(guiManager);
                     guiManager.sendMessage(new Message("getLobbyPlayers", ""));
+                    guiManager.sendMessage(new Message("getGames", ""));
                 }
             });
             createNewGameButton.setText("New Game");
@@ -61,16 +69,20 @@ public class AwtLobby extends ReceiverFrame {
             buttonPanel.add(createNewGameButton);
 
             list.setFont(new Font("TimesRoman",Font.PLAIN,16));
-
         }
 
     @Override
     public void receive(Message message) {
             if(message.getHeader().equals("lobbyplayers")){
+//                list.removeAll();
+//
+//                for(String player : message.getValue().split(","))
+//                list.add(player);
+            } else if(message.getHeader().equals("games")){
                 list.removeAll();
 
-                for(String player : message.getValue().split(","))
-                list.add(player);
+                for(String game : message.getValue().split(","))
+                    list.add(game);
             }
 
         System.out.println("Lobby received message " + message.toString());
