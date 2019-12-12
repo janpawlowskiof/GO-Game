@@ -9,11 +9,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+//TODO: (mało pilne) dorzucić drugą listę na listę gier dostępnych
+// też mało pilnie przemianować zmienne pokroju buttonPanel na coś innego
 public class AwtLobby extends ReceiverFrame {
 
         JPanel buttonPanel = new JPanel();
         JPanel listPanel = new JPanel();
-        GuiManager guiManager = null;
+        GuiManager guiManager;
         List list = new List();
 
         public AwtLobby(GuiManager guiManager){
@@ -29,6 +31,14 @@ public class AwtLobby extends ReceiverFrame {
             JButton joinButton = new JButton();
             JButton refreshButton = new JButton();
             JButton createNewGameButton = new JButton();
+            createNewGameButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    System.out.println("CreateNewGame clicked...");
+                    System.out.println(guiManager);
+                    guiManager.sendMessage(new Message("createGame", ""));
+                }
+            });
             joinButton.setText("Join");
             refreshButton.setText("Refresh");
             refreshButton.addActionListener(new ActionListener() {
@@ -52,16 +62,11 @@ public class AwtLobby extends ReceiverFrame {
 
             list.setFont(new Font("TimesRoman",Font.PLAIN,16));
 
-            //dla przykladu
-            list.add("pierwsza gra");
-            list.add("druga gra");
-            list.add("trzecia gra");
-
         }
 
     @Override
     public void receive(Message message) {
-            if(message.getHeader().equals("lobbyPlayers")){
+            if(message.getHeader().equals("lobbyplayers")){
                 list.removeAll();
 
                 for(String player : message.getValue().split(","))

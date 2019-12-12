@@ -5,6 +5,7 @@ import juanolek.client.IMessageReceiver;
 import juanolek.client.Message;
 import juanolek.gui.awt.AwtLobby;
 import juanolek.gui.awt.AwtLogin;
+import juanolek.gui.awt.Board;
 import juanolek.gui.awt.ReceiverFrame;
 
 import javax.swing.*;
@@ -23,6 +24,7 @@ public class GuiManager implements IMessageReceiver {
         if(viewFrameReceiver != null){
             viewFrameReceiver.dispose();
         }
+        viewFrameReceiver = new Board(this);
     }
 
     public void showLoginWindow() {
@@ -48,7 +50,7 @@ public class GuiManager implements IMessageReceiver {
             showLobby();
         }
         else if(message.getHeader().equals("showboard")){
-                showBoard();
+            showBoard();
         }
         else if(message.getHeader().toLowerCase().equals("info")){
             JOptionPane.showMessageDialog(null, message.getValue());

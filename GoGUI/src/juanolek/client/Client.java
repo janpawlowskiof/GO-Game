@@ -31,7 +31,6 @@ public class Client implements IMessageReceiver {
     }
 
     public synchronized void sendMessage(Message message){
-        System.out.println("Get to Clinet...");
         connectionManager.sendMessage(message);
     }
 

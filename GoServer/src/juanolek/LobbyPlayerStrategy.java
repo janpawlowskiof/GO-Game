@@ -7,16 +7,16 @@ public class LobbyPlayerStrategy implements IPlayerStrategy {
         if(message.getHeader().equals("exit")){
             //TODO: Wyrzucenie gracza
         }
-        else if(message.getHeader().equals("getLobbyPlayers")){
+        else if(message.getHeader().equals("getlobbyplayers")){
             sender.sendMessage(Lobby.getInstance().getLobbyPlayersMessage());
         }
-        else if(message.getHeader().equals("getGames")){
+        else if(message.getHeader().equals("getgames")){
             sender.sendMessage(Lobby.getInstance().getGamesMessage());
         }
-        else if(message.getHeader().equals("createGame")){
+        else if(message.getHeader().equals("creategame")){
             Lobby.getInstance().createGame(sender);
         }
-        else if(message.getHeader().equals("joinGame")){
+        else if(message.getHeader().equals("joingame")){
             Lobby.getInstance().addPlayerToGame(sender, message.getValue());
         }
         else{

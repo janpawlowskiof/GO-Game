@@ -1,6 +1,7 @@
 package juanolek;
 
 import juanolek.exceptions.NoSlotsAvailableException;
+import juanolek.game.Game;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -23,7 +24,7 @@ public class Lobby {
 
     public synchronized void createGame(Player player){
         removePlayer(player);
-        Game newGame = new Game(player);
+        Game newGame = new Game(19, player);
         games.add(newGame);
     }
 

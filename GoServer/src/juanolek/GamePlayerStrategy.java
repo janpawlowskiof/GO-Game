@@ -1,5 +1,7 @@
 package juanolek;
 
+import juanolek.game.Game;
+
 public class GamePlayerStrategy implements IPlayerStrategy {
 
     Game game;

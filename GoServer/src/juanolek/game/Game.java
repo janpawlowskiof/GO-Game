@@ -1,5 +1,9 @@
-package juanolek;
+package juanolek.game;
 
+import juanolek.GamePlayerStrategy;
+import juanolek.Lobby;
+import juanolek.Message;
+import juanolek.Player;
 import juanolek.exceptions.NoSlotsAvailableException;
 
 import java.util.UUID;
@@ -9,9 +13,11 @@ public class Game{
     private Player playerWhite = null;
     private Player playerBlack = null;
     private UUID uuid;
+    private int size;
 
-    public Game(Player player){
+    public Game(int size, Player player){
         this.uuid = UUID.randomUUID();
+        this.size = size;
         try {
             addPlayer(player);
         } catch (NoSlotsAvailableException e) {
@@ -36,6 +42,7 @@ public class Game{
         player.setPlayerStrategy(new GamePlayerStrategy(this));
         Lobby.getInstance().removePlayer(player);
         player.sendMessage(new Message("Info", "you have joined the game"));
+        player.sendMessage(new Message("showboard", ""));
     }
 
     public void endSession(){

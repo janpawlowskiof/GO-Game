@@ -6,7 +6,7 @@ public class Message {
     private String value;
 
     public Message(String header, String value){
-        this.header = header;
+        this.header = header.toLowerCase();
         this.value = value;
     }
 
