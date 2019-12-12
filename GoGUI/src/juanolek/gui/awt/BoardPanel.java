@@ -1,18 +1,18 @@
 package juanolek.gui.awt;
-
-import juanolek.gui.GuiManager;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.util.ArrayList;
+import java.util.List;
 import static juanolek.gui.awt.AwtBoard.*;
+
 
 public class BoardPanel extends JPanel {
 
 
-    AwtBoard board;
+    private AwtBoard board;
+    private List<Pawn> pawns = new ArrayList<>();
 
     public BoardPanel(AwtBoard board) {
         this.board = board;
@@ -30,10 +30,17 @@ public class BoardPanel extends JPanel {
                 int col = Math.round((float) (e.getX() - BORDER_SIZE)
                         / TILE_SIZE);
 
-                board.onTileSelected(col, row);
+                if(checkPoint(col,row)) {
+
+                    board.onTileSelected(col, row);
+                    repaint();
+
+                }
+                else System.out.println("nie wolno");
+
             }
         });
-        repaint();
+
 
     }
 
@@ -55,7 +62,37 @@ public class BoardPanel extends JPanel {
         }
 
 
+        for(Pawn p : pawns){
+
+            if(p.getColor() == Color.BLACK){
+
+                g2.setColor(Color.BLACK);
+                g2.fillOval(p.getX()*TILE_SIZE+BORDER_SIZE-CONSTANT,p.getY()*TILE_SIZE+BORDER_SIZE-CONSTANT,30,30);
+            }
+            else if(p.getColor() == Color.WHITE){
+
+
+                g2.setColor(Color.WHITE);
+                g2.fillOval(p.getX()*TILE_SIZE+BORDER_SIZE-CONSTANT,p.getY()*TILE_SIZE+BORDER_SIZE-CONSTANT,30,30);
+
+            }
+
+
+        }
 
     }
 
+    private boolean checkPoint(int x, int y){
+
+        boolean position = true;
+        if(x>SIZE-1 || y>SIZE-1) position = false;
+        if(x<0 || y<0) position = false;
+
+
+        return position;
+    }
+
+    public List<Pawn> getPawns() {
+        return pawns;
+    }
 }
