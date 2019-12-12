@@ -17,6 +17,11 @@ public class GameLogic{
     GameLogic(int size){
         this.size = size;
         this.tiles = new GameTile[size][size];
+        for(int x = 0; x < size; x++){
+            for(int y= 0; y < size; y++){
+                tiles[x][y] = new GameTile();
+            }
+        }
         this.makingMove = GamePawnType.White;
     }
 

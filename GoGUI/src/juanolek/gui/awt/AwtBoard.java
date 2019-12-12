@@ -28,29 +28,20 @@ public class AwtBoard extends ReceiverFrame{
         JPanel boardPanel = new BoardPanel(this);
         JPanel buttonPanel = new JPanel();
 
-
-
         add(boardPanel,BorderLayout.CENTER);
         add(buttonPanel,BorderLayout.SOUTH);
-
 
         JButton button = new JButton();
         buttonPanel.add(button);
         button.setText("Pass");
         pack();
-
-
     }
-
-
 
     public void setBlackPawn(int x, int y){
 
         Graphics g = getGraphics();
         g.setColor(Color.BLACK);
         g.fillOval(x*TILE_SIZE+BORDER_SIZE-CONSTANT,y*TILE_SIZE+BORDER_SIZE-CONSTANT,30,30);
-
-
     }
 
     public void setWhitePawn(int x, int y){
@@ -58,11 +49,10 @@ public class AwtBoard extends ReceiverFrame{
         Graphics g = getGraphics();
         g.setColor(Color.WHITE);
         g.fillOval(x*TILE_SIZE+BORDER_SIZE-CONSTANT,y*TILE_SIZE+BORDER_SIZE-CONSTANT,30,30);
-
-
     }
 
     public void onTileSelected(int x, int y){
+        guiManager.sendMessage(new Message("tileselected", x+","+y));
         System.out.println("Tile " + x + ", " + y + "selected");
     }
 
@@ -70,6 +60,17 @@ public class AwtBoard extends ReceiverFrame{
     @Override
     public void receive(Message message) {
         System.out.println("AwtBoard rec: " + message);
+
+        if(message.getHeader().equals("setwhitepawn")){
+            int x = Integer.parseInt(message.getValue().split(",")[0]);
+            int y = Integer.parseInt(message.getValue().split(",")[1]);
+            setWhitePawn(x, y);
+        }
+        else if(message.getHeader().equals("setblackpawn")){
+            int x = Integer.parseInt(message.getValue().split(",")[0]);
+            int y = Integer.parseInt(message.getValue().split(",")[1]);
+            setBlackPawn(x, y);
+        }
     }
 
 

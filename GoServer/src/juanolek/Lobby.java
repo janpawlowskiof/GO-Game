@@ -40,7 +40,6 @@ public class Lobby {
 
     public synchronized void addPlayerToGame(Player player, String gameUuid) throws GameNotExistingException, NoSlotsAvailableException {
         UUID uuid;
-
         try{
             uuid = UUID.fromString(gameUuid);
         }

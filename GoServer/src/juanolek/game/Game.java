@@ -47,13 +47,13 @@ public class Game{
             for(GameBoardChange boardChange : boardChanges){
                 if(boardChange.getChangeType() == GameBoardChange.ChangeType.Add){
                     Message message = new Message(boardChange.getPawnType() == GamePawnType.White ? "setWhitePawn" : "setBlackPawn", x+","+y);
-                    playerWhite.sendMessage(message);
-                    playerBlack.sendMessage(message);
+                    if(playerWhite != null) playerWhite.sendMessage(message);
+                    if(playerBlack != null) playerBlack.sendMessage(message);
                 }
                 else if(boardChange.getChangeType() == GameBoardChange.ChangeType.Delete){
                     Message message = new Message("deletePawn", x + "," + y);
-                    playerWhite.sendMessage(message);
-                    playerBlack.sendMessage(message);
+                    if(playerWhite != null) playerWhite.sendMessage(message);
+                    if(playerBlack != null) playerBlack.sendMessage(message);
                 }
 
             }

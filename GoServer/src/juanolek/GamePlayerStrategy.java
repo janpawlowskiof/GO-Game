@@ -15,6 +15,11 @@ public class GamePlayerStrategy implements IPlayerStrategy {
         if(message.getHeader().equals("exit")){
             game.endSession();
         }
+        else if(message.getHeader().equals("tileselected")){
+            int x = Integer.parseInt(message.getValue().split(",")[0]);
+            int y = Integer.parseInt(message.getValue().split(",")[1]);
+            game.setPawn(x, y, sender);
+        }
         else{
             System.out.println("Header " + message.getHeader() + "received in game but not implemented");
         }
