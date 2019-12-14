@@ -28,13 +28,25 @@ public class AwtBoard extends ReceiverFrame{
         setLocationRelativeTo(null);
 
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(4,1));
+        buttonPanel.setPreferredSize(new Dimension(200,800));
 
         add(boardPanel,BorderLayout.CENTER);
-        add(buttonPanel,BorderLayout.SOUTH);
+        add(buttonPanel,BorderLayout.EAST);
 
-        JButton button = new JButton();
-        buttonPanel.add(button);
-        button.setText("Pass");
+        JButton passButton = new JButton();
+        JButton leaveButton = new JButton();
+        JLabel score = new JLabel("Your Score:",SwingConstants.CENTER);
+        JLabel scoreValue = new JLabel("",SwingConstants.CENTER);
+
+        buttonPanel.add(score);
+        score.setFont(new Font("Arial",Font.PLAIN,20));
+        buttonPanel.add(scoreValue);
+        scoreValue.setFont(new Font("Arial",Font.PLAIN,20));
+        buttonPanel.add(passButton);
+        passButton.setText("Pass");
+        buttonPanel.add(leaveButton);
+        leaveButton.setText("Leave");
         pack();
     }
 

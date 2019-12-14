@@ -1,6 +1,5 @@
 package juanolek.gui.awt;
 
-import juanolek.client.IMessageReceiver;
 import juanolek.client.Message;
 import juanolek.gui.GuiManager;
 
@@ -16,7 +15,8 @@ public class AwtLobby extends ReceiverFrame {
         JPanel buttonPanel = new JPanel();
         JPanel listPanel = new JPanel();
         GuiManager guiManager;
-        List list = new List();
+        List players = new List();
+        List games = new List();
 
         public AwtLobby(GuiManager guiManager){
             this.guiManager = guiManager;
@@ -24,7 +24,7 @@ public class AwtLobby extends ReceiverFrame {
             this.setSize(800,400);
             this.setVisible(true);
             this.setResizable(false);
-            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            this.setDefaultCloseOperation(EXIT_ON_CLOSE);
             this.setLocationRelativeTo(null);
 
             this.setLayout(new BorderLayout());
@@ -44,8 +44,8 @@ public class AwtLobby extends ReceiverFrame {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     System.out.println("Join Game clicked...");
-                    if(list.getSelectedItem() != null)
-                        guiManager.sendMessage(new Message("JoinGame", list.getSelectedItem()));
+                    if(players.getSelectedItem() != null)
+                        guiManager.sendMessage(new Message("JoinGame", players.getSelectedItem()));
                 }
             });
             refreshButton.setText("Refresh");
@@ -62,27 +62,29 @@ public class AwtLobby extends ReceiverFrame {
             this.add(buttonPanel,BorderLayout.SOUTH);
             this.add(listPanel,BorderLayout.CENTER);
             //this.add(button,BorderLayout.SOUTH);
-            listPanel.setLayout(new GridLayout());
-            listPanel.add(list);
+            listPanel.setLayout(new GridLayout(1,2));
+            listPanel.add(players);
+            listPanel.add(games);
             buttonPanel.add(joinButton);
             buttonPanel.add(refreshButton);
             buttonPanel.add(createNewGameButton);
 
-            list.setFont(new Font("TimesRoman",Font.PLAIN,16));
+            players.setFont(new Font("TimesRoman",Font.PLAIN,16));
+            games.setFont(new Font("TimesRoman",Font.PLAIN,16));
         }
 
     @Override
     public void receive(Message message) {
             if(message.getHeader().equals("lobbyplayers")){
-//                list.removeAll();
-//
-//                for(String player : message.getValue().split(","))
-//                list.add(player);
+                players.removeAll();
+
+                for(String player : message.getValue().split(","))
+                players.add(player);
             } else if(message.getHeader().equals("games")){
-                list.removeAll();
+                games.removeAll();
 
                 for(String game : message.getValue().split(","))
-                    list.add(game);
+                    games.add(game);
             }
 
         System.out.println("Lobby received message " + message.toString());
