@@ -35,7 +35,7 @@ public class Lobby {
     }
 
     public synchronized void removeGame(Game game){
-        games.remove(game);
+        games.remove(game.getUuid());
     }
 
     public synchronized void addPlayerToGame(Player player, String gameUuid) throws GameNotExistingException, NoSlotsAvailableException {
