@@ -17,11 +17,9 @@ public class Game{
     private Player playerBlack = null;
     private GameLogic gameLogic;
     private UUID uuid;
-    private int size;
 
     public Game(int size, Player player){
         this.uuid = UUID.randomUUID();
-        this.size = size;
         try {
             addPlayer(player);
         } catch (NoSlotsAvailableException e) {
@@ -39,7 +37,6 @@ public class Game{
         }
         else{
             System.out.println("Player not in game session tried moving pawn! Terminating server");
-            //close
         }
         
         try {
@@ -56,9 +53,7 @@ public class Game{
                     if(playerWhite != null) playerWhite.sendMessage(message);
                     if(playerBlack != null) playerBlack.sendMessage(message);
                 }
-
             }
-
         } catch (InvalidMoveException e) {
             player.sendMessage(new Message("Info", e.getMessage()));
         } catch (TrashDataException e) {
@@ -68,23 +63,27 @@ public class Game{
     }
 
     public void addPlayer(Player player) throws NoSlotsAvailableException{
-        System.out.println("Player " + player.getUuid().toString() + " tries to join the game");
+        System.out.println("Player " + player.getNick() + " tries to join the game");
+        System.out.println("Lobby count 0 = " + Lobby.getInstance().getLobbyPlayers().size());
+        Lobby.getInstance().removePlayer(player);
+        System.out.println("Lobby count 0 = " + Lobby.getInstance().getLobbyPlayers().size());
+        player.setPlayerStrategy(new GamePlayerStrategy(this));
+        player.sendMessage(new Message("showboard", ""));
 
         if(playerWhite == null){
             playerWhite = player;
+            playerWhite.sendMessage(new Message("colorinfo", "white"));
         }
         else if(playerBlack == null){
-            playerWhite.sendMessage(new Message("Info", "A player " + player.getUuid().toString() + " has joined the game!"));
+            //playerWhite.sendMessage(new Message("Info", "A player " + player.getNick() + " has joined the game!"));
             playerBlack = player;
+            playerWhite.sendMessage(new Message("OpponentInfo", playerBlack.getNick()));
+            playerBlack.sendMessage(new Message("OpponentInfo", playerWhite.getNick()));
+            playerBlack.sendMessage(new Message("colorinfo", "black"));
         }
         else{
             throw new NoSlotsAvailableException();
         }
-
-        player.setPlayerStrategy(new GamePlayerStrategy(this));
-        Lobby.getInstance().removePlayer(player);
-        player.sendMessage(new Message("Info", "you have joined the game"));
-        player.sendMessage(new Message("showboard", ""));
     }
 
     public void endSession(){
@@ -101,18 +100,18 @@ public class Game{
 
     public Message getOpponentInfo(Player player){
         if(player == playerWhite){
-            return new Message("opponentInfo", playerBlack.getUuid().toString());
+            return new Message("opponentInfo", playerBlack.getNick());
         }
         else{
-            return new Message("opponentInfo", playerWhite.getUuid().toString());
+            return new Message("opponentInfo", playerWhite.getNick());
         }
     }
 
     public void kickPlayer(Player player){
-        if(playerWhite == player){
+        if(playerWhite.getUuid() == player.getUuid()){
             playerWhite = null;
         }
-        else if(playerBlack == player){
+        else if(playerBlack.getUuid() == player.getUuid()){
             playerBlack = null;
         }
         endSession();

@@ -1,20 +1,46 @@
 package juanolek;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Player implements IMessageReceiver{
 
     private IConnectionManager connectionManager;
     private IPlayerStrategy playerStrategy;
-    private final UUID uuid;
+    private String nick;
+    private UUID uuid;
+    private static ArrayList<String> usedNicks;
+    static{
+        usedNicks = new ArrayList<>();
+    }
+
 
     public Player(IConnectionManager connectionManager){
         this.connectionManager = connectionManager;
         this.uuid = UUID.randomUUID();
+        setNick("GenericNick");
     }
 
     public UUID getUuid(){
         return uuid;
+    }
+    public String getNick(){
+        return nick;
+    }
+    public void setNick(String nick) {
+        usedNicks.remove(this.nick);
+        if(!usedNicks.contains(nick)){
+            this.nick = nick;
+        }
+        else{
+            int i = 0;
+            while(usedNicks.contains(nick+i)){
+                i++;
+            }
+            this.nick = nick+i;
+        }
+        usedNicks.add(this.nick);
+        System.out.println("Your nick has been set to " + nick);
     }
 
     public void startReceivingMessages(){

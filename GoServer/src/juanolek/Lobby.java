@@ -21,7 +21,7 @@ public class Lobby {
         players.put(newPlayer.getUuid(), newPlayer);
         newPlayer.setPlayerStrategy(new LobbyPlayerStrategy());
         newPlayer.sendMessage(new Message("showlobby", ""));
-        newPlayer.sendMessage(new Message("Info", "Welcome in lobby " + newPlayer.getUuid().toString()));
+        //newPlayer.sendMessage(new Message("Info", "Welcome in lobby " + newPlayer.getNick()));
     }
 
     public synchronized void createGame(Player player){
@@ -31,7 +31,7 @@ public class Lobby {
     }
 
     public synchronized void removePlayer(Player player){
-        players.remove(player);
+        players.remove(player.getUuid());
     }
 
     public synchronized void removeGame(Game game){
@@ -67,12 +67,16 @@ public class Lobby {
         StringBuilder stringBuilder = new StringBuilder();
         players.forEach((uuid, player) -> {
             stringBuilder.append(",");
-            stringBuilder.append(player.getUuid().toString());
+            stringBuilder.append(player.getNick());
         });
         return new Message("lobbyPlayers", stringBuilder.toString().substring(1));
     }
 
     public synchronized Message getGamesMessage() {
+        if(games.size() == 0){
+            return new Message("games", "");
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         games.forEach((uuid, game) -> {
             stringBuilder.append(",");

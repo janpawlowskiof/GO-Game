@@ -15,7 +15,8 @@ public class AwtBoard extends ReceiverFrame{
     public static final int CONSTANT =15;
     GuiManager guiManager = null;
     BoardPanel boardPanel = new BoardPanel(this);
-
+    JLabel opponentInfo;
+    JLabel colorInfo;
 
     public AwtBoard(GuiManager guiManager){
         this.guiManager = guiManager;
@@ -28,7 +29,7 @@ public class AwtBoard extends ReceiverFrame{
         setLocationRelativeTo(null);
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(4,1));
+        buttonPanel.setLayout(new GridLayout(5,1));
         buttonPanel.setPreferredSize(new Dimension(200,800));
 
         add(boardPanel,BorderLayout.CENTER);
@@ -37,12 +38,15 @@ public class AwtBoard extends ReceiverFrame{
         JButton passButton = new JButton();
         JButton leaveButton = new JButton();
         JLabel score = new JLabel("Your Score:",SwingConstants.CENTER);
-        JLabel scoreValue = new JLabel("",SwingConstants.CENTER);
+        opponentInfo = new JLabel("<html>You are waiting for<br> an opponent</html>",SwingConstants.CENTER);
+        colorInfo = new JLabel("",SwingConstants.CENTER);
 
+        buttonPanel.add(opponentInfo);
+        opponentInfo.setFont(new Font("Arial",Font.PLAIN,14));
+        buttonPanel.add(colorInfo);
+        colorInfo.setFont(new Font("Arial",Font.PLAIN,14));
         buttonPanel.add(score);
-        score.setFont(new Font("Arial",Font.PLAIN,20));
-        buttonPanel.add(scoreValue);
-        scoreValue.setFont(new Font("Arial",Font.PLAIN,20));
+        score.setFont(new Font("Arial",Font.PLAIN,14));
         buttonPanel.add(passButton);
         passButton.setText("Pass");
         buttonPanel.add(leaveButton);
@@ -99,6 +103,12 @@ public class AwtBoard extends ReceiverFrame{
             int x = Integer.parseInt(message.getValue().split(",")[0]);
             int y = Integer.parseInt(message.getValue().split(",")[1]);
             clearPawn(x, y);
+        }
+        else if(message.getHeader().equals("opponentinfo")){
+            opponentInfo.setText("<html>You are playing vs <br>" + message.getValue()+"</html>");
+        }
+        else if(message.getHeader().equals("colorinfo")){
+            colorInfo.setText(message.getValue());
         }
     }
 

@@ -44,8 +44,8 @@ public class AwtLobby extends ReceiverFrame {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     System.out.println("Join Game clicked...");
-                    if(players.getSelectedItem() != null)
-                        guiManager.sendMessage(new Message("JoinGame", players.getSelectedItem()));
+                    if(games.getSelectedItem() != null)
+                        guiManager.sendMessage(new Message("JoinGame", games.getSelectedItem()));
                 }
             });
             refreshButton.setText("Refresh");
