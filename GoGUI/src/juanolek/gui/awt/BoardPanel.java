@@ -34,11 +34,8 @@ public class BoardPanel extends JPanel {
                     board.onTileSelected(col, row);
                 }
                 else System.out.println("nie wolno");
-
             }
         });
-
-
     }
 
     @Override

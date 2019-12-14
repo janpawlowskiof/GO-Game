@@ -46,12 +46,13 @@ public class Game{
             List<GameBoardChange> boardChanges = gameLogic.setPawn(x, y, playerType);
             for(GameBoardChange boardChange : boardChanges){
                 if(boardChange.getChangeType() == GameBoardChange.ChangeType.Add){
-                    Message message = new Message(boardChange.getPawnType() == GamePawnType.White ? "setWhitePawn" : "setBlackPawn", x+","+y);
+                    Message message = new Message(boardChange.getPawnType() == GamePawnType.White ? "setWhitePawn" : "setBlackPawn", boardChange.getX()+","+boardChange.getY());
                     if(playerWhite != null) playerWhite.sendMessage(message);
                     if(playerBlack != null) playerBlack.sendMessage(message);
                 }
                 else if(boardChange.getChangeType() == GameBoardChange.ChangeType.Delete){
-                    Message message = new Message("deletePawn", x + "," + y);
+                    Message message = new Message("deletePawn", boardChange.getX() + "," + boardChange.getY());
+                    System.out.println("Sending message after delete" + message);
                     if(playerWhite != null) playerWhite.sendMessage(message);
                     if(playerBlack != null) playerBlack.sendMessage(message);
                 }

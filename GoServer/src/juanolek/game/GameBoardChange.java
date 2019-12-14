@@ -24,6 +24,7 @@ public class GameBoardChange {
     }
 
     public static GameBoardChange delete(int x, int y){
+        System.out.println("Deleting change " + x + " " + y);
         return new GameBoardChange(x, y);
     }
 

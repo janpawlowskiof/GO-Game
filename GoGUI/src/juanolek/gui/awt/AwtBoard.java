@@ -29,37 +29,32 @@ public class AwtBoard extends ReceiverFrame{
 
         JPanel buttonPanel = new JPanel();
 
-
-
         add(boardPanel,BorderLayout.CENTER);
         add(buttonPanel,BorderLayout.SOUTH);
-
 
         JButton button = new JButton();
         buttonPanel.add(button);
         button.setText("Pass");
         pack();
-
-
     }
 
 
 
-    public void setBlackPawn(int x, int y){
+    public synchronized void setBlackPawn(int x, int y){
 
         Pawn newBlackPawn = new Pawn(x,y,Color.BLACK);
         boardPanel.getPawns().add(newBlackPawn);
         repaint();
     }
 
-    public void setWhitePawn(int x, int y){
+    public synchronized void setWhitePawn(int x, int y){
 
         Pawn newWhitePawn = new Pawn(x,y,Color.WHITE);
         boardPanel.getPawns().add(newWhitePawn);
         repaint();
     }
 
-    public void clearPawn(int x, int y){
+    public synchronized void clearPawn(int x, int y){
 
         for (Iterator<Pawn> iterator = boardPanel.getPawns().iterator(); iterator.hasNext();) {
             Pawn center = iterator.next();
@@ -68,7 +63,7 @@ public class AwtBoard extends ReceiverFrame{
                 break;
             }
         }
-
+        repaint();
     }
 
     public void onTileSelected(int x, int y){
@@ -87,6 +82,11 @@ public class AwtBoard extends ReceiverFrame{
             int x = Integer.parseInt(message.getValue().split(",")[0]);
             int y = Integer.parseInt(message.getValue().split(",")[1]);
             setBlackPawn(x, y);
+        }
+        else if(message.getHeader().equals("deletepawn")){
+            int x = Integer.parseInt(message.getValue().split(",")[0]);
+            int y = Integer.parseInt(message.getValue().split(",")[1]);
+            clearPawn(x, y);
         }
     }
 
