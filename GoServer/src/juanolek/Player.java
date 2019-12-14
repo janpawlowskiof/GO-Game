@@ -34,7 +34,17 @@ public class Player implements IMessageReceiver{
             System.out.println("Brak strategii dla gracza");
             return;
         }
-
-        playerStrategy.handleMessage(message, this);
+        if(message == null){
+            playerStrategy.forceQuit(this);
+            try{
+                connectionManager.disconnect();
+            }
+            catch(Exception ex){
+                System.out.println(ex);
+            }
+        }
+        else{
+            playerStrategy.handleMessage(message, this);
+        }
     }
 }

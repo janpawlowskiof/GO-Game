@@ -32,4 +32,9 @@ public class LobbyPlayerStrategy implements IPlayerStrategy {
             System.out.println("Nieznany header " + message.getHeader());
         }
     }
+
+    @Override
+    public void forceQuit(Player sender) {
+        Lobby.getInstance().removePlayer(sender);
+    }
 }

@@ -62,7 +62,7 @@ public class Game{
         } catch (InvalidMoveException e) {
             player.sendMessage(new Message("Info", e.getMessage()));
         } catch (TrashDataException e) {
-            e.printStackTrace();
+            System.out.println("Trash data received");
         }
 
     }
@@ -106,6 +106,16 @@ public class Game{
         else{
             return new Message("opponentInfo", playerWhite.getUuid().toString());
         }
+    }
+
+    public void kickPlayer(Player player){
+        if(playerWhite == player){
+            playerWhite = null;
+        }
+        else if(playerBlack == player){
+            playerBlack = null;
+        }
+        endSession();
     }
 
     public UUID getUuid(){

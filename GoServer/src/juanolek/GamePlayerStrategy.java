@@ -24,4 +24,9 @@ public class GamePlayerStrategy implements IPlayerStrategy {
             System.out.println("Header " + message.getHeader() + "received in game but not implemented");
         }
     }
+
+    @Override
+    public void forceQuit(Player sender) {
+        game.kickPlayer(sender);
+    }
 }

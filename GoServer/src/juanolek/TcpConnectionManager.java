@@ -34,10 +34,12 @@ public class TcpConnectionManager implements IConnectionManager {
             while(!exitFlag){
                 try {
                     String line = bufferedReader.readLine();
-                    if(line == null)
+                    if(line == null){
+                        receiver.receive(null);
                         return;
-                    int separatorIndex = line.indexOf('\t');
+                    }
 
+                    int separatorIndex = line.indexOf('\t');
                     Message message;
                     if(separatorIndex < 0 || separatorIndex >= line.length())
                         message = new Message(line, "");
@@ -46,7 +48,7 @@ public class TcpConnectionManager implements IConnectionManager {
 
                     receiver.receive(message);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage() + "\n\n" + e.getStackTrace());
                 }
             }
         }
