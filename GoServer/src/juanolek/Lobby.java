@@ -83,6 +83,10 @@ public class Lobby {
     }
 
     public synchronized Message getLobbyPlayersMessage() {
+        if(players.size() == 0){
+            return new Message("lobbyPlayers", "");
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         players.forEach((uuid, player) -> {
             stringBuilder.append(",");

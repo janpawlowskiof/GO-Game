@@ -18,6 +18,8 @@ public class AwtBoard extends ReceiverFrame{
     BoardPanel boardPanel = new BoardPanel(this);
     JLabel opponentInfo;
     JLabel colorInfo;
+    JLabel yourScore;
+    JLabel opponentsScore;
 
     public AwtBoard(GuiManager guiManager){
         this.guiManager = guiManager;
@@ -30,7 +32,7 @@ public class AwtBoard extends ReceiverFrame{
         setLocationRelativeTo(null);
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(5,1));
+        buttonPanel.setLayout(new GridLayout(6,1));
         buttonPanel.setPreferredSize(new Dimension(200,800));
 
         add(boardPanel,BorderLayout.CENTER);
@@ -38,18 +40,22 @@ public class AwtBoard extends ReceiverFrame{
 
         JButton passButton = new JButton();
         JButton leaveButton = new JButton();
-        JLabel score = new JLabel("Your Score:",SwingConstants.CENTER);
-        opponentInfo = new JLabel("<html>You are waiting for<br> an opponent</html>",SwingConstants.CENTER);
+        opponentInfo = new JLabel("<html>Waiting for<br> an opponent to join</html>",SwingConstants.CENTER);
         colorInfo = new JLabel("",SwingConstants.CENTER);
 
         buttonPanel.add(opponentInfo);
         opponentInfo.setFont(new Font("Arial",Font.PLAIN,14));
         buttonPanel.add(colorInfo);
         colorInfo.setFont(new Font("Arial",Font.PLAIN,14));
-        buttonPanel.add(score);
-        score.setFont(new Font("Arial",Font.PLAIN,14));
+
         buttonPanel.add(passButton);
         passButton.setText("Pass");
+        passButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                guiManager.sendMessage(new Message("pass", ""));
+            }
+        });
         buttonPanel.add(leaveButton);
         leaveButton.setText("Abort the game");
         leaveButton.addActionListener(new ActionListener() {
@@ -58,6 +64,13 @@ public class AwtBoard extends ReceiverFrame{
                 guiManager.sendMessage(new Message("abortgame", ""));
             }
         });
+        yourScore = new JLabel("Your Score: 0");
+        buttonPanel.add(yourScore);
+        yourScore.setFont(new Font("Arial",Font.PLAIN,14));
+        opponentsScore = new JLabel("Opponent's Score: 0");
+        buttonPanel.add(opponentsScore);
+        opponentsScore.setFont(new Font("Arial",Font.PLAIN,14));
+
         pack();
     }
 
@@ -115,7 +128,13 @@ public class AwtBoard extends ReceiverFrame{
             opponentInfo.setText("<html>You are playing vs <br>" + message.getValue()+"</html>");
         }
         else if(message.getHeader().equals("colorinfo")){
-            colorInfo.setText(message.getValue());
+            colorInfo.setText("<html>You are playing as <br>" + message.getValue()+"</html>");
+        }
+        else if(message.getHeader().equals("yourscore")){
+            yourScore.setText("Your score: " + message.getValue());
+        }
+        else if(message.getHeader().equals("opponentsscore")){
+            opponentsScore.setText("Opponent's score: " + message.getValue());
         }
     }
 

@@ -11,7 +11,7 @@ import juanolek.exceptions.TrashDataException;
 import java.util.List;
 import java.util.UUID;
 
-public class Game{
+public class Game implements IEndGameHandler{
 
     private Player playerWhite = null;
     private Player playerBlack = null;
@@ -25,7 +25,7 @@ public class Game{
         } catch (NoSlotsAvailableException e) {
             System.out.println("What a Terrible Failure Adding a player to a fresh game session");
         }
-        this.gameLogic = new GameLogic(size);
+        this.gameLogic = new GameLogic(this, size);
     }
 
     public void setPawn(int x, int y, Player player){
@@ -38,7 +38,6 @@ public class Game{
         else{
             System.out.println("Player not in game session tried moving pawn! Terminating server");
         }
-        
         try {
             List<GameBoardChange> boardChanges = gameLogic.setPawn(x, y, playerType);
             for(GameBoardChange boardChange : boardChanges){
@@ -59,7 +58,22 @@ public class Game{
         } catch (TrashDataException e) {
             System.out.println("Trash data received");
         }
+    }
 
+    public void pass(Player player){
+        try{
+            if(player == playerWhite){
+                if(gameLogic.pass(GamePawnType.White))
+                    playerBlack.sendMessage(new Message("info", "Your opponent passed"));
+            }
+            else{
+                if (gameLogic.pass((GamePawnType.Black)))
+                    playerWhite.sendMessage(new Message("info", "Your opponent passed"));
+            }
+        }
+        catch(InvalidMoveException ex){
+            player.sendMessage(new Message("info", ex.getMessage()));
+        }
     }
 
     public void addPlayer(Player player) throws NoSlotsAvailableException{
@@ -86,13 +100,15 @@ public class Game{
         }
     }
 
-    public void endSession(){
+    public void endSession(boolean notifyPlayers){
         if(playerWhite != null){
-            playerWhite.sendMessage(new Message("Info", "Game session has been closed"));
+            if(notifyPlayers)
+                playerWhite.sendMessage(new Message("Info", "Game session has been closed"));
             Lobby.getInstance().addPlayer(playerWhite);
         }
         if(playerBlack != null){
-            playerWhite.sendMessage(new Message("Info", "Game session has been closed"));
+            if(notifyPlayers)
+                playerBlack.sendMessage(new Message("Info", "Game session has been closed"));
             Lobby.getInstance().addPlayer(playerBlack);
         }
         Lobby.getInstance().removeGame(this);
@@ -114,7 +130,7 @@ public class Game{
         else if(playerBlack.getUuid() == player.getUuid()){
             playerBlack = null;
         }
-        endSession();
+        endSession(true);
     }
 
     public UUID getUuid(){
@@ -122,5 +138,31 @@ public class Game{
     }
     public int getPlayerCount(){
         return (playerWhite != null ? 1 : 0) + (playerBlack != null ? 1 : 0);
+    }
+
+    @Override
+    public void handleEndGame() {
+        int whitePoints = gameLogic.getWhitePoints();
+        int blackPoints = gameLogic.getBlackPoints();
+
+        playerWhite.sendMessage(new Message("yourScore", whitePoints + ""));
+        playerWhite.sendMessage(new Message("opponentsScore", blackPoints + ""));
+        playerBlack.sendMessage(new Message("yourScore", blackPoints + ""));
+        playerBlack.sendMessage(new Message("opponentsScore", whitePoints + ""));
+
+        if(whitePoints > blackPoints){
+            playerWhite.sendMessage(new Message("info", "Game ended. You have won!"));
+            playerBlack.sendMessage(new Message("info", "Game ended. You have lost!"));
+        }
+        else if(whitePoints < blackPoints){
+            playerBlack.sendMessage(new Message("info", "Game ended. You have won!"));
+            playerWhite.sendMessage(new Message("info", "Game ended. You have lost!"));
+        }
+        else{
+            playerBlack.sendMessage(new Message("info", "Game ended. Draw!"));
+            playerWhite.sendMessage(new Message("info", "Game ended. Draw!"));
+        }
+
+        endSession(false);
     }
 }

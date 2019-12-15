@@ -1,10 +1,10 @@
 package juanolek.game;
 
-import juanolek.Message;
+import juanolek.Player;
 import juanolek.exceptions.InvalidMoveException;
 import juanolek.exceptions.TrashDataException;
-
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.List;
 
 public class GameLogic{
@@ -13,8 +13,12 @@ public class GameLogic{
     GamePawnType makingMove;
     GameTile[][] tiles;
     int lastWhiteX = -1, lastWhiteY = -1, lastBlackX = -1, lastBlackY = -1;
+    int whitePoints = 0, blackPoints = 0;
+    boolean lastMovePassed = false;
+    IEndGameHandler endGameHandler;
 
-    GameLogic(int size){
+    GameLogic(IEndGameHandler endGameHandler, int size){
+        this.endGameHandler = endGameHandler;
         this.size = size;
         this.tiles = new GameTile[size][size];
         for(int x = 0; x < size; x++){
@@ -25,10 +29,17 @@ public class GameLogic{
         this.makingMove = GamePawnType.White;
     }
 
+    public int getWhitePoints() {
+        return whitePoints;
+    }
+
+    public int getBlackPoints() {
+        return blackPoints;
+    }
+
     private int getBreaths(int x, int y, GamePawnType type){
         return getBreaths(x, y, type, new ArrayList<>());
     }
-
     private int getBreaths(int x, int y, GamePawnType chainType, List<GameTile> visited){
         if(x < 0 || x >= size || y < 0 || y >= size)
             return 0;
@@ -50,7 +61,6 @@ public class GameLogic{
             return 0;
         }
     }
-
 
     synchronized ArrayList<GameBoardChange> setPawn(int x, int y, GamePawnType type) throws InvalidMoveException, TrashDataException {
         ArrayList<GameBoardChange> changes = new ArrayList<>();
@@ -100,11 +110,15 @@ public class GameLogic{
 
         changes.add(GameBoardChange.add(x, y, type));
         makingMove = GamePawnType.other(makingMove);
+        lastMovePassed = false;
 
         for(int xIndex = 0; xIndex < size; xIndex++)
             for(int yIndex = 0; yIndex < size; yIndex++){
                 if(tiles[xIndex][yIndex].type == GamePawnType.other(type) && getBreaths(xIndex, yIndex, tiles[xIndex][yIndex].type) <= 0){
                     tiles[xIndex][yIndex].isAlive = false;
+                    //dodanie punktów za zbicie pionka
+                    if(type == GamePawnType.White) whitePoints++;
+                    else blackPoints++;
                     changes.add(GameBoardChange.delete(xIndex, yIndex));
                 }
             }
@@ -116,7 +130,79 @@ public class GameLogic{
                     tiles[xIndex][yIndex].isAlive = true;
                 }
             }
-
         return changes;
+    }
+
+    //active when a player attempts to pass
+    public boolean pass(GamePawnType type) throws InvalidMoveException{
+        if(type == makingMove){
+            if(lastMovePassed == true){
+                endGame();
+                return false;
+            }
+            else{
+                makingMove = GamePawnType.other(makingMove);
+                lastMovePassed = true;
+                return true;
+            }
+        }
+        else{
+            throw new InvalidMoveException("You can't pass when it's not you turn");
+        }
+    }
+
+    //check if a tile counts area of "type"
+    public boolean checkFinalTileType(int x, int y, ArrayList<GameTile> visited, GamePawnType type){
+        if(x < 0 || x >= size || y < 0 || y >= size)
+            return true;
+
+        if(visited.contains(tiles[x][y])){
+            return true;
+        }
+        visited.add(tiles[x][y]);
+        if(tiles[x][y].type == GamePawnType.other(type)){
+            return false;
+        }
+        else if(tiles[x][y].type == type){
+            return true;
+        }
+        else{
+            return checkFinalTileType(x+1, y, visited, type) &&
+                    checkFinalTileType(x-1, y, visited, type) &&
+                    checkFinalTileType(x, y+1, visited, type) &&
+                    checkFinalTileType(x, y-1, visited, type);
+        }
+    }
+
+    //checks if a tile in the endgame counts as a white, black or no-mans area
+    public GamePawnType assignFinalTileType(int x, int y){
+        if(tiles[x][y].type != GamePawnType.Empty){
+            return GamePawnType.Empty;
+        }
+        if(checkFinalTileType(x, y, new ArrayList<>(), GamePawnType.White)){
+            return GamePawnType.White;
+        }
+        if(checkFinalTileType(x, y, new ArrayList<>(), GamePawnType.Black)){
+            return GamePawnType.Black;
+        }
+        return GamePawnType.Empty;
+    }
+
+    //called on game end
+    public void endGame(){
+        System.out.println("Game has ended");
+
+        for(int x = 0; x < size; x++)
+            for(int y = 0; y < size; y++){
+                GamePawnType finalType = assignFinalTileType(x, y);
+                if(finalType == GamePawnType.White){
+                    whitePoints++;
+                }
+                else if(finalType == GamePawnType.Black){
+                    blackPoints++;
+                }
+            }
+
+        endGameHandler.handleEndGame();
     }
 }
