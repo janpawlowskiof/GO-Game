@@ -13,7 +13,7 @@ public class GameLogic{
     int size;
     GamePawnType makingMove;
     GameTile[][] tiles;
-
+    int lastWhiteX = -1, lastWhiteY = -1, lastBlackX = -1, lastBlackY = -1;
 
     GameLogic(int size){
         this.size = size;
@@ -72,32 +72,51 @@ public class GameLogic{
 
         tiles[x][y].type = type;
         int breaths = getBreaths(x, y, type);
-        System.out.println("New pawn has " + breaths + " breaths");
-        if(breaths > 0){
-            changes.add(GameBoardChange.add(x, y, type));
-            makingMove = GamePawnType.other(makingMove);
-
-            for(int xIndex = 0; xIndex < size; xIndex++)
-                for(int yIndex = 0; yIndex < size; yIndex++){
-                    if(tiles[xIndex][yIndex].type == GamePawnType.other(type) && getBreaths(xIndex, yIndex, tiles[xIndex][yIndex].type) <= 0){
-                        tiles[xIndex][yIndex].isAlive = false;
-                        changes.add(GameBoardChange.delete(xIndex, yIndex));
-                    }
+        boolean killsOpponent = false;
+        for(int xIndex = 0; xIndex < size; xIndex++)
+            for(int yIndex = 0; yIndex < size; yIndex++){
+                if(tiles[xIndex][yIndex].type == GamePawnType.other(type) && getBreaths(xIndex, yIndex, tiles[xIndex][yIndex].type) <= 0){
+                    killsOpponent = true;
+                    break;
                 }
+            }
+        tiles[x][y].type = GamePawnType.Empty;
+        if(breaths <= 0 && !killsOpponent) {
+            throw new InvalidMoveException("Can't place pawn on a tile with no breaths");
+        }
+        if(type == GamePawnType.White && x == lastWhiteX && y == lastWhiteY ||
+                type == GamePawnType.Black && x == lastBlackX && y == lastBlackY){
+            throw new InvalidMoveException("Can't place pawn here because of ko rule");
+        }
 
-            for(int xIndex = 0; xIndex < size; xIndex++)
-                for(int yIndex = 0; yIndex < size; yIndex++){
-                    if(!tiles[xIndex][yIndex].isAlive){
-                        tiles[xIndex][yIndex].type = GamePawnType.Empty;
-                        tiles[xIndex][yIndex].isAlive = true;
-                    }
-                }
+        tiles[x][y].type = type;
+        if(type == GamePawnType.White){
+            lastWhiteX = x;
+            lastWhiteY = y;
         }
         else{
-            tiles[x][y].type = GamePawnType.Empty;
-            throw new InvalidMoveException("Brak oddechow dla pionka");
+            lastBlackX = x;
+            lastBlackY = y;
         }
 
+        changes.add(GameBoardChange.add(x, y, type));
+        makingMove = GamePawnType.other(makingMove);
+
+        for(int xIndex = 0; xIndex < size; xIndex++)
+            for(int yIndex = 0; yIndex < size; yIndex++){
+                if(tiles[xIndex][yIndex].type == GamePawnType.other(type) && getBreaths(xIndex, yIndex, tiles[xIndex][yIndex].type) <= 0){
+                    tiles[xIndex][yIndex].isAlive = false;
+                    changes.add(GameBoardChange.delete(xIndex, yIndex));
+                }
+            }
+
+        for(int xIndex = 0; xIndex < size; xIndex++)
+            for(int yIndex = 0; yIndex < size; yIndex++){
+                if(!tiles[xIndex][yIndex].isAlive){
+                    tiles[xIndex][yIndex].type = GamePawnType.Empty;
+                    tiles[xIndex][yIndex].isAlive = true;
+                }
+            }
 
         return changes;
     }
