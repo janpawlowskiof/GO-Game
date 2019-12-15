@@ -3,8 +3,9 @@ import juanolek.client.Message;
 import juanolek.gui.GuiManager;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Iterator;
-
 
 public class AwtBoard extends ReceiverFrame{
 
@@ -50,7 +51,13 @@ public class AwtBoard extends ReceiverFrame{
         buttonPanel.add(passButton);
         passButton.setText("Pass");
         buttonPanel.add(leaveButton);
-        leaveButton.setText("Leave");
+        leaveButton.setText("Abort the game");
+        leaveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                guiManager.sendMessage(new Message("abortgame", ""));
+            }
+        });
         pack();
     }
 

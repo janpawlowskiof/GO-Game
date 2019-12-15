@@ -5,7 +5,6 @@ import juanolek.exceptions.InvalidMoveException;
 import juanolek.exceptions.TrashDataException;
 
 import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.List;
 
 public class GameLogic{
@@ -67,7 +66,7 @@ public class GameLogic{
             throw new InvalidMoveException("Invalid coordinates");
         }
         if(tiles[x][y].type != GamePawnType.Empty){
-            throw new InvalidMoveException("Cell not empty");
+            throw new InvalidMoveException("Can't place pawn on a non-empty tile");
         }
 
         tiles[x][y].type = type;
@@ -120,6 +119,4 @@ public class GameLogic{
 
         return changes;
     }
-
-
 }

@@ -45,8 +45,6 @@ public class GuiManager implements IMessageReceiver {
 
     @Override
     public void receive(Message message) {
-
-        System.out.println("GM rec: " + message.toString());
         if(message.getHeader().equals("showlobby")){
             showLobby();
         }
@@ -54,7 +52,7 @@ public class GuiManager implements IMessageReceiver {
             showBoard();
         }
         else if(message.getHeader().toLowerCase().equals("info")){
-            JOptionPane.showMessageDialog(null, message.getValue());
+            JOptionPane.showMessageDialog(viewFrameReceiver, message.getValue());
         }
         else{
             viewFrameReceiver.receive(message);

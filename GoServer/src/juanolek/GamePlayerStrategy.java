@@ -12,7 +12,7 @@ public class GamePlayerStrategy implements IPlayerStrategy {
 
     @Override
     public void handleMessage(Message message, Player sender) {
-        if(message.getHeader().equals("exit")){
+        if(message.getHeader().equals("abortgame")){
             game.endSession();
         }
         else if(message.getHeader().equals("tileselected")){
@@ -21,7 +21,7 @@ public class GamePlayerStrategy implements IPlayerStrategy {
             game.setPawn(x, y, sender);
         }
         else{
-            System.out.println("Header " + message.getHeader() + "received in game but not implemented");
+            System.out.println("Header " + message.getHeader() + " received in game but not implemented");
         }
     }
 
