@@ -1,5 +1,7 @@
 package juanolek.game;
 
+import java.util.List;
+
 public interface IEndGameHandler {
-    void handleEndGame();
+    void handleEndGame(List<GameBoardChange> boardChanges);
 }

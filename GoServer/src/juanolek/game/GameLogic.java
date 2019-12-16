@@ -192,8 +192,25 @@ public class GameLogic{
     public void endGame(){
         System.out.println("Game has ended");
 
+        ArrayList<GameBoardChange> boardChanges = new ArrayList<>();
+        for(int x = 0; x < size; x++)
+            for(int y = 0; y < size; y++) {
+                if(tiles[x][y].type != GamePawnType.Empty && getBreaths(x, y, GamePawnType.White) < 2 && getBreaths(x, y, GamePawnType.Black) < 2){
+                    boardChanges.add(GameBoardChange.delete(x, y));
+                    tiles[x][y].isAlive = false;
+                }
+            }
+
+        for(int x = 0; x < size; x++)
+            for(int y = 0; y < size; y++) {
+                if (!tiles[x][y].isAlive) {
+                    tiles[x][y].type = GamePawnType.Empty;
+                }
+            }
+
         for(int x = 0; x < size; x++)
             for(int y = 0; y < size; y++){
+
                 GamePawnType finalType = assignFinalTileType(x, y);
                 if(finalType == GamePawnType.White){
                     whitePoints++;
@@ -203,6 +220,6 @@ public class GameLogic{
                 }
             }
 
-        endGameHandler.handleEndGame();
+        endGameHandler.handleEndGame(boardChanges);
     }
 }

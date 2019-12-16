@@ -78,9 +78,7 @@ public class Game implements IEndGameHandler{
 
     public void addPlayer(Player player) throws NoSlotsAvailableException{
         System.out.println("Player " + player.getNick() + " tries to join the game");
-        System.out.println("Lobby count 0 = " + Lobby.getInstance().getLobbyPlayers().size());
         Lobby.getInstance().removePlayer(player);
-        System.out.println("Lobby count 0 = " + Lobby.getInstance().getLobbyPlayers().size());
         player.setPlayerStrategy(new GamePlayerStrategy(this));
         player.sendMessage(new Message("showboard", ""));
 
@@ -141,7 +139,17 @@ public class Game implements IEndGameHandler{
     }
 
     @Override
-    public void handleEndGame() {
+    public void handleEndGame(List<GameBoardChange> boardChanges) {
+
+        for(GameBoardChange boardChange : boardChanges) {
+            if (boardChange.getChangeType() == GameBoardChange.ChangeType.Delete) {
+                Message message = new Message("deletePawn", boardChange.getX() + "," + boardChange.getY());
+                System.out.println("Sending message after delete" + message);
+                if (playerWhite != null) playerWhite.sendMessage(message);
+                if (playerBlack != null) playerBlack.sendMessage(message);
+            }
+}
+
         int whitePoints = gameLogic.getWhitePoints();
         int blackPoints = gameLogic.getBlackPoints();
 
