@@ -1,5 +1,6 @@
 package juanolek.client;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -18,12 +19,14 @@ public class Client implements IMessageReceiver {
             connectionManager.startListening(this);
         }
         catch (UnknownHostException ex) {
-            ex.printStackTrace();
-            System.out.println("Error!!!");
+            JOptionPane.showMessageDialog(null, "Error connecting to a server! Unknown host!");
         } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error!!!");
+            JOptionPane.showMessageDialog(null, "Can't connect to a server!");
         }
+    }
+
+    public void disconnect(){
+        connectionManager = null;
     }
 
     public void setMessageReceiver(IMessageReceiver messageReceiver){
@@ -36,8 +39,16 @@ public class Client implements IMessageReceiver {
 
     @Override
     public void receive(Message message) {
-        System.out.println("Received a message:" + message.toString());
-        if(messageReceiver != null){
+        if(message == null){
+            try {
+                connectionManager.disconnect();
+                connectionManager = null;
+                messageReceiver.receive(new Message("showlogin", ""));
+            } catch (IOException e) {
+                System.out.println("Error closing the socket");
+            }
+        }
+        else if(messageReceiver != null){
             messageReceiver.receive(message);
         }
     }

@@ -31,8 +31,9 @@ public class TcpConnectionManager implements IConnectionManager {
 
         @Override
         public void run(){
-            while(!exitFlag){
-                try {
+            try {
+                while(!exitFlag){
+
                     String line = bufferedReader.readLine();
                     if(line == null){
                         receiver.receive(null);
@@ -47,9 +48,10 @@ public class TcpConnectionManager implements IConnectionManager {
                         message = new Message(line.substring(0, separatorIndex), line.substring(separatorIndex + 1, line.length()));
 
                     receiver.receive(message);
-                } catch (IOException e) {
-                    System.out.println(e.getMessage() + "\n\n" + e.getStackTrace());
                 }
+            }
+            catch (IOException e) {
+                System.out.println("Error 53 9792 " + e.getMessage() + "\n\n" + e.getStackTrace());
             }
         }
     }

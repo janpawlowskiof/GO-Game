@@ -1,5 +1,9 @@
 package juanolek.client;
 
+import juanolek.client.IConnectionManager;
+import juanolek.client.IMessageReceiver;
+import juanolek.client.Message;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -28,28 +32,34 @@ public class TcpConnectionManager implements IConnectionManager {
         public TcpListener(IMessageReceiver receiver){
             this.receiver = receiver;
         }
+
         @Override
         public void run(){
             while(!exitFlag){
                 try {
                     String line = bufferedReader.readLine();
-                    if(line == null)
+                    if (line == null) {
+                        receiver.receive(null);
                         return;
-                    int separatorIndex = line.indexOf('\t');
+                    }
 
+                    int separatorIndex = line.indexOf('\t');
                     Message message;
-                    if(separatorIndex < 0 || separatorIndex >= line.length())
+                    if (separatorIndex < 0 || separatorIndex >= line.length())
                         message = new Message(line, "");
                     else
                         message = new Message(line.substring(0, separatorIndex), line.substring(separatorIndex + 1, line.length()));
 
                     receiver.receive(message);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                }
+                catch (IOException e) {
+                    System.out.println("Error 53 9792 " + e.getMessage() + "\n\n" + e.getStackTrace());
+                    receiver.receive(new Message("showlogin", ""));
                 }
             }
         }
     }
+
 
     @Override
     public void disconnect() throws IOException {
@@ -58,6 +68,7 @@ public class TcpConnectionManager implements IConnectionManager {
 
     @Override
     public void sendMessage(Message message) {
+        String value = "test";
         try {
             bufferedWriter.write(message.getHeader() + '\t' + message.getValue());
             bufferedWriter.newLine();

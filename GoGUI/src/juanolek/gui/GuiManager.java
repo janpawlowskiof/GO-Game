@@ -45,11 +45,21 @@ public class GuiManager implements IMessageReceiver {
 
     @Override
     public void receive(Message message) {
+        if(message == null){
+            client.disconnect();
+            showLoginWindow();
+            JOptionPane.showMessageDialog(viewFrameReceiver, "Connection to the server lost!");
+            return;
+        }
+
         if(message.getHeader().equals("showlobby")){
             showLobby();
         }
         else if(message.getHeader().equals("showboard")){
             showBoard();
+        }
+        else if(message.getHeader().equals("showlogin")){
+            showLoginWindow();
         }
         else if(message.getHeader().toLowerCase().equals("info")){
             JOptionPane.showMessageDialog(viewFrameReceiver, message.getValue());
