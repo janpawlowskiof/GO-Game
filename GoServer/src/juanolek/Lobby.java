@@ -114,4 +114,11 @@ public class Lobby {
         }
         return instance;
     }
+
+    private void clean(){
+
+        this.instance = null;
+
+    }
+
 }

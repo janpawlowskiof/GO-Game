@@ -1,10 +1,13 @@
-package juanolek;
+import juanolek.Lobby;
+import juanolek.Message;
+import juanolek.Player;
 
 import static org.junit.Assert.*;
 
-class LobbyTest {
+public class LobbyTest {
 
-    private class PlayerMock extends Player{
+
+    private class PlayerMock extends Player {
         public PlayerMock() {
             super(null);
         }
@@ -14,7 +17,7 @@ class LobbyTest {
     }
 
     @org.junit.Test
-    void testAddPlayer() {
+   public void testAddPlayer() {
         Player testPlayer = new PlayerMock();
         assertFalse(Lobby.getInstance().getLobbyPlayers().containsValue(testPlayer));
         Lobby.getInstance().addPlayer(testPlayer);
@@ -22,7 +25,7 @@ class LobbyTest {
     }
 
     @org.junit.Test
-    void testCreateGame() {
+   public void testCreateGame() {
         Player testPlayer = new PlayerMock();
         int gamesCount = Lobby.getInstance().getGames().size();
         Lobby.getInstance().createGame(testPlayer);
@@ -31,7 +34,7 @@ class LobbyTest {
     }
 
     @org.junit.Test
-    void testRemovePlayer() {
+   public void testRemovePlayer() {
         Player testPlayer = new PlayerMock();
         assertFalse(Lobby.getInstance().getLobbyPlayers().containsValue(testPlayer));
         Lobby.getInstance().addPlayer(testPlayer);
