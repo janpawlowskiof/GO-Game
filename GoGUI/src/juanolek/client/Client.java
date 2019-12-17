@@ -7,14 +7,12 @@ import java.net.UnknownHostException;
 
 public class Client implements IMessageReceiver {
 
-    Socket clientSocket = null;
-    BufferedReader consoleIn;
-    IConnectionManager connectionManager = null;
-    IMessageReceiver messageReceiver = null;
+    private IConnectionManager connectionManager = null;
+    private IMessageReceiver messageReceiver = null;
 
     public void connect(String host, int port){
         try {
-            clientSocket = new Socket(host, port);
+            Socket clientSocket = new Socket(host, port);
             connectionManager = new TcpConnectionManager(clientSocket);
             connectionManager.startListening(this);
         }

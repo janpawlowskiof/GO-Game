@@ -137,7 +137,7 @@ public class Lobby {
 
     private void clean(){
 
-        this.instance = null;
+        instance = null;
 
     }
 

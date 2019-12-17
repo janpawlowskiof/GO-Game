@@ -1,6 +1,5 @@
 package juanolek.gui.awt;
 
-import juanolek.client.IMessageReceiver;
 import juanolek.client.Message;
 import juanolek.gui.GuiManager;
 
@@ -11,14 +10,10 @@ import java.awt.event.ActionListener;
 
 public class AwtLogin extends ReceiverFrame {
 
-    TextField host_name_tf,gate_tf;
-    Button confirm;
-    GuiManager guiManager;
-    Label host_name;
-    Label port;
+    private final TextField host_name_tf;
+    private final TextField gate_tf;
 
     public AwtLogin(GuiManager guiManager) {
-        this.guiManager = guiManager;
 
         setSize(400,400);
         setBackground(Color.ORANGE);
@@ -31,8 +26,8 @@ public class AwtLogin extends ReceiverFrame {
         setLayout(null);
 
         Label Title = new Label("Welcome Player", Label.CENTER);
-        host_name = new Label("Host Name", Label.CENTER);
-        port = new Label("Port", Label.CENTER);
+        Label host_name = new Label("Host Name", Label.CENTER);
+        Label port = new Label("Port", Label.CENTER);
 
         Title.setFont(new Font("TimesRoman",Font.PLAIN,16));
         host_name_tf = new TextField(30);
@@ -40,16 +35,14 @@ public class AwtLogin extends ReceiverFrame {
         gate_tf = new TextField(20);
         gate_tf.setText("6666");
 
-        confirm = new Button("Log In");
-        confirm.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e) {
-                try{
-                    int port = Integer.parseInt(gate_tf.getText());
-                    guiManager.connect(host_name_tf.getText(), port);
-                }
-                catch(Exception ex){
-                    JOptionPane.showMessageDialog(null, "Incorrect port!");
-                }
+        Button confirm = new Button("Log In");
+        confirm.addActionListener(e -> {
+            try{
+                int port1 = Integer.parseInt(gate_tf.getText());
+                guiManager.connect(host_name_tf.getText(), port1);
+            }
+            catch(Exception ex){
+                JOptionPane.showMessageDialog(null, "Incorrect port!");
             }
         });
 

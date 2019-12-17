@@ -45,7 +45,7 @@ public class TcpConnectionManager implements IConnectionManager {
                     if(separatorIndex < 0 || separatorIndex >= line.length())
                         message = new Message(line, "");
                     else
-                        message = new Message(line.substring(0, separatorIndex), line.substring(separatorIndex + 1, line.length()));
+                        message = new Message(line.substring(0, separatorIndex), line.substring(separatorIndex + 1));
 
                     receiver.receive(message);
                 }

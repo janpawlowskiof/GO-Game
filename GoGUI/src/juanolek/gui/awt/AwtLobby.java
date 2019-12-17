@@ -10,14 +10,10 @@ import java.awt.event.ActionListener;
 
 public class AwtLobby extends ReceiverFrame {
 
-        JPanel buttonPanel = new JPanel();
-        JPanel listPanel = new JPanel();
-        GuiManager guiManager;
-        List players = new List();
-        List games = new List();
+    private final List players = new List();
+        private final List games = new List();
 
         public AwtLobby(GuiManager guiManager){
-            this.guiManager = guiManager;
 
             this.setSize(800,400);
             this.setVisible(true);
@@ -30,42 +26,32 @@ public class AwtLobby extends ReceiverFrame {
             JButton refreshButton = new JButton();
             JButton createNewGameButton = new JButton("Create new game");
             JButton createNewGameWithBotButton = new JButton("Create game with bot");
-            createNewGameButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    System.out.println("CreateNewGame clicked...");
-                    System.out.println(guiManager);
-                    guiManager.sendMessage(new Message("createGame", ""));
-                }
+            createNewGameButton.addActionListener(actionEvent -> {
+                System.out.println("CreateNewGame clicked...");
+                System.out.println(guiManager);
+                guiManager.sendMessage(new Message("createGame", ""));
             });
-            createNewGameWithBotButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    System.out.println("CreateNewGameWithBot clicked...");
-                    System.out.println(guiManager);
-                    guiManager.sendMessage(new Message("createGameWithBot", ""));
-                }
+            createNewGameWithBotButton.addActionListener(actionEvent -> {
+                System.out.println("CreateNewGameWithBot clicked...");
+                System.out.println(guiManager);
+                guiManager.sendMessage(new Message("createGameWithBot", ""));
             });
             joinButton.setText("Join selected game");
-            joinButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    System.out.println("Join Game clicked...");
-                    if(games.getSelectedItem() != null)
-                        guiManager.sendMessage(new Message("JoinGame", games.getSelectedItem()));
-                }
+            joinButton.addActionListener(actionEvent -> {
+                System.out.println("Join Game clicked...");
+                if(games.getSelectedItem() != null)
+                    guiManager.sendMessage(new Message("JoinGame", games.getSelectedItem()));
             });
             refreshButton.setText("Refresh");
-            refreshButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    System.out.println("Refresh clicked...");
-                    guiManager.sendMessage(new Message("getLobbyPlayers", ""));
-                    guiManager.sendMessage(new Message("getGames", ""));
-                }
+            refreshButton.addActionListener(actionEvent -> {
+                System.out.println("Refresh clicked...");
+                guiManager.sendMessage(new Message("getLobbyPlayers", ""));
+                guiManager.sendMessage(new Message("getGames", ""));
             });
 
+            JPanel buttonPanel = new JPanel();
             this.add(buttonPanel,BorderLayout.SOUTH);
+            JPanel listPanel = new JPanel();
             this.add(listPanel,BorderLayout.CENTER);
             listPanel.setLayout(new GridLayout(1,2));
             listPanel.add(players);

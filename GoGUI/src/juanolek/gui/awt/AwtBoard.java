@@ -14,12 +14,12 @@ public class AwtBoard extends ReceiverFrame{
     public static final int TILE_SIZE = 40;
     public static final int BORDER_SIZE = TILE_SIZE;
     public static final int CONSTANT =15;
-    GuiManager guiManager = null;
-    BoardPanel boardPanel = new BoardPanel(this);
-    JLabel opponentInfo;
-    JLabel colorInfo;
-    JLabel yourScore;
-    JLabel opponentsScore;
+    private GuiManager guiManager;
+    private final BoardPanel boardPanel = new BoardPanel(this);
+    private final JLabel opponentInfo;
+    private final JLabel colorInfo;
+    private final JLabel yourScore;
+    private final JLabel opponentsScore;
 
     public AwtBoard(GuiManager guiManager){
         this.guiManager = guiManager;
@@ -50,20 +50,10 @@ public class AwtBoard extends ReceiverFrame{
 
         buttonPanel.add(passButton);
         passButton.setText("Pass");
-        passButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                guiManager.sendMessage(new Message("pass", ""));
-            }
-        });
+        passButton.addActionListener(actionEvent -> guiManager.sendMessage(new Message("pass", "")));
         buttonPanel.add(leaveButton);
         leaveButton.setText("Abort the game");
-        leaveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                guiManager.sendMessage(new Message("abortgame", ""));
-            }
-        });
+        leaveButton.addActionListener(actionEvent -> guiManager.sendMessage(new Message("abortgame", "")));
         yourScore = new JLabel("Your Score: 0");
         buttonPanel.add(yourScore);
         yourScore.setFont(new Font("Arial",Font.PLAIN,14));
@@ -76,21 +66,21 @@ public class AwtBoard extends ReceiverFrame{
 
 
 
-    public synchronized void setBlackPawn(int x, int y){
+    private synchronized void setBlackPawn(int x, int y){
 
         Pawn newBlackPawn = new Pawn(x,y,Color.BLACK);
         boardPanel.getPawns().add(newBlackPawn);
         repaint();
     }
 
-    public synchronized void setWhitePawn(int x, int y){
+    private synchronized void setWhitePawn(int x, int y){
 
         Pawn newWhitePawn = new Pawn(x,y,Color.WHITE);
         boardPanel.getPawns().add(newWhitePawn);
         repaint();
     }
 
-    public synchronized void clearPawn(int x, int y){
+    private synchronized void clearPawn(int x, int y){
 
         for (Iterator<Pawn> iterator = boardPanel.getPawns().iterator(); iterator.hasNext();) {
             Pawn center = iterator.next();
@@ -109,32 +99,37 @@ public class AwtBoard extends ReceiverFrame{
 
     @Override
     public void receive(Message message) {
-        if(message.getHeader().equals("setwhitepawn")){
-            int x = Integer.parseInt(message.getValue().split(",")[0]);
-            int y = Integer.parseInt(message.getValue().split(",")[1]);
-            setWhitePawn(x, y);
-        }
-        else if(message.getHeader().equals("setblackpawn")){
-            int x = Integer.parseInt(message.getValue().split(",")[0]);
-            int y = Integer.parseInt(message.getValue().split(",")[1]);
-            setBlackPawn(x, y);
-        }
-        else if(message.getHeader().equals("deletepawn")){
-            int x = Integer.parseInt(message.getValue().split(",")[0]);
-            int y = Integer.parseInt(message.getValue().split(",")[1]);
-            clearPawn(x, y);
-        }
-        else if(message.getHeader().equals("opponentinfo")){
-            opponentInfo.setText("<html>You are playing vs <br>" + message.getValue()+"</html>");
-        }
-        else if(message.getHeader().equals("colorinfo")){
-            colorInfo.setText("<html>You are playing as <br>" + message.getValue()+"</html>");
-        }
-        else if(message.getHeader().equals("yourscore")){
-            yourScore.setText("Your score: " + message.getValue());
-        }
-        else if(message.getHeader().equals("opponentsscore")){
-            opponentsScore.setText("Opponent's score: " + message.getValue());
+        switch (message.getHeader()) {
+            case "setwhitepawn": {
+                int x = Integer.parseInt(message.getValue().split(",")[0]);
+                int y = Integer.parseInt(message.getValue().split(",")[1]);
+                setWhitePawn(x, y);
+                break;
+            }
+            case "setblackpawn": {
+                int x = Integer.parseInt(message.getValue().split(",")[0]);
+                int y = Integer.parseInt(message.getValue().split(",")[1]);
+                setBlackPawn(x, y);
+                break;
+            }
+            case "deletepawn": {
+                int x = Integer.parseInt(message.getValue().split(",")[0]);
+                int y = Integer.parseInt(message.getValue().split(",")[1]);
+                clearPawn(x, y);
+                break;
+            }
+            case "opponentinfo":
+                opponentInfo.setText("<html>You are playing vs <br>" + message.getValue() + "</html>");
+                break;
+            case "colorinfo":
+                colorInfo.setText("<html>You are playing as <br>" + message.getValue() + "</html>");
+                break;
+            case "yourscore":
+                yourScore.setText("Your score: " + message.getValue());
+                break;
+            case "opponentsscore":
+                opponentsScore.setText("Opponent's score: " + message.getValue());
+                break;
         }
     }
 

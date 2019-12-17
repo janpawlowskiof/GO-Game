@@ -6,13 +6,13 @@ import juanolek.client.Message;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class TcpConnectionManager implements IConnectionManager {
 
-    private Socket socket;
+    private final Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
-    private TcpListener tcpListener = null;
 
     public TcpConnectionManager(Socket socket){
         this.socket = socket;
@@ -26,10 +26,10 @@ public class TcpConnectionManager implements IConnectionManager {
 
     private class TcpListener extends Thread{
 
-        public boolean exitFlag = false;
-        IMessageReceiver receiver;
+        final boolean exitFlag = false;
+        final IMessageReceiver receiver;
 
-        public TcpListener(IMessageReceiver receiver){
+        TcpListener(IMessageReceiver receiver){
             this.receiver = receiver;
         }
 
@@ -48,12 +48,12 @@ public class TcpConnectionManager implements IConnectionManager {
                     if (separatorIndex < 0 || separatorIndex >= line.length())
                         message = new Message(line, "");
                     else
-                        message = new Message(line.substring(0, separatorIndex), line.substring(separatorIndex + 1, line.length()));
+                        message = new Message(line.substring(0, separatorIndex), line.substring(separatorIndex + 1));
 
                     receiver.receive(message);
                 }
                 catch (IOException e) {
-                    System.out.println("Error 53 9792 " + e.getMessage() + "\n\n" + e.getStackTrace());
+                    System.out.println("Error 53 9792 " + e.getMessage() + "\n\n" + Arrays.toString(e.getStackTrace()));
                     receiver.receive(new Message("showlogin", ""));
                 }
             }
@@ -68,7 +68,6 @@ public class TcpConnectionManager implements IConnectionManager {
 
     @Override
     public void sendMessage(Message message) {
-        String value = "test";
         try {
             bufferedWriter.write(message.getHeader() + '\t' + message.getValue());
             bufferedWriter.newLine();
@@ -80,7 +79,7 @@ public class TcpConnectionManager implements IConnectionManager {
 
     @Override
     public void startListening(IMessageReceiver receiver) {
-        tcpListener = new TcpListener(receiver);
+        TcpListener tcpListener = new TcpListener(receiver);
         tcpListener.start();
     }
 }

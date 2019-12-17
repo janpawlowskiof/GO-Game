@@ -3,7 +3,6 @@ package juanolek.gui;
 import juanolek.client.Client;
 import juanolek.client.IMessageReceiver;
 import juanolek.client.Message;
-import juanolek.gui.awt.AwtBoard;
 import juanolek.gui.awt.AwtLobby;
 import juanolek.gui.awt.AwtLogin;
 import juanolek.gui.awt.AwtBoard;
@@ -13,7 +12,7 @@ import javax.swing.*;
 
 public class GuiManager implements IMessageReceiver {
 
-    private Client client;
+    private final Client client;
     private ReceiverFrame viewFrameReceiver = null;
 
     public GuiManager(){
@@ -21,14 +20,14 @@ public class GuiManager implements IMessageReceiver {
         showLoginWindow();
     }
 
-    public void showBoard() {
+    private void showBoard() {
         if(viewFrameReceiver != null){
             viewFrameReceiver.dispose();
         }
         viewFrameReceiver = new AwtBoard(this);
     }
 
-    public void showLoginWindow() {
+    private void showLoginWindow() {
         if(viewFrameReceiver != null){
             viewFrameReceiver.dispose();
         }
@@ -36,7 +35,7 @@ public class GuiManager implements IMessageReceiver {
     }
 
 
-    public void showLobby() {
+    private void showLobby() {
         if(viewFrameReceiver != null){
             viewFrameReceiver.dispose();
         }

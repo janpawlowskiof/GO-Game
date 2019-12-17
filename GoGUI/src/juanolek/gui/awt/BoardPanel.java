@@ -8,14 +8,12 @@ import java.util.List;
 import static juanolek.gui.awt.AwtBoard.*;
 
 
-public class BoardPanel extends JPanel {
+class BoardPanel extends JPanel {
 
 
-    private AwtBoard board;
-    private List<Pawn> pawns = new ArrayList<>();
+    private final List<Pawn> pawns = new ArrayList<>();
 
     public BoardPanel(AwtBoard board) {
-        this.board = board;
 
         setPreferredSize(new Dimension(800,800));
         setBackground(Color.ORANGE);
