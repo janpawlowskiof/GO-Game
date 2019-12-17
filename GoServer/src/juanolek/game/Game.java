@@ -27,8 +27,13 @@ public class Game implements IEndGameHandler{
 
     public void setPawn(int x, int y, Player player){
         GamePawnType playerType = null;
-        if(player == playerWhite)
+        if(player == playerWhite){
             playerType = GamePawnType.White;
+            if(playerBlack == null){
+                player.sendMessage(new Message("info", "You have to wait for your opponent to join the game"));
+                return;
+            }
+        }
         else if(player == playerBlack){
             playerType = GamePawnType.Black;
         }
@@ -50,6 +55,12 @@ public class Game implements IEndGameHandler{
                     if(playerBlack != null) playerBlack.sendMessage(message);
                 }
             }
+            int whitePoints = gameLogic.getWhitePoints();
+            int blackPoints = gameLogic.getBlackPoints();
+            playerWhite.sendMessage(new Message("yourScore", whitePoints + ""));
+            playerWhite.sendMessage(new Message("opponentsScore", blackPoints + ""));
+            playerBlack.sendMessage(new Message("yourScore", blackPoints + ""));
+            playerBlack.sendMessage(new Message("opponentsScore", whitePoints + ""));
 
             if(player == playerWhite) playerBlack.sendMessage(new Message("yourturn", ""));
             else playerWhite.sendMessage(new Message("yourturn", ""));
@@ -81,8 +92,20 @@ public class Game implements IEndGameHandler{
         }
     }
 
+    public String getDescription(){
+        if(playerBlack == null){
+            return playerWhite.getNick() + " waiting for an opponent...";
+        }
+        return playerWhite.getNick() + " vs " + playerBlack.getNick() + " " + gameLogic.getWhitePoints() + ":" + gameLogic.getBlackPoints();
+    }
+
     public void addPlayer(Player player) throws NoSlotsAvailableException{
         System.out.println("Player " + player.getNick() + " tries to join the game");
+
+        if(playerWhite != null && playerBlack != null)
+            throw new NoSlotsAvailableException();
+
+
         Lobby.getInstance().removePlayer(player);
         player.setPlayerStrategy(new GamePlayerStrategy(this));
         player.sendMessage(new Message("showboard", ""));
@@ -97,9 +120,6 @@ public class Game implements IEndGameHandler{
             playerWhite.sendMessage(new Message("OpponentInfo", playerBlack.getNick()));
             playerBlack.sendMessage(new Message("OpponentInfo", playerWhite.getNick()));
             playerBlack.sendMessage(new Message("colorinfo", "black"));
-        }
-        else{
-            throw new NoSlotsAvailableException();
         }
     }
 

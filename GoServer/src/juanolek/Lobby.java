@@ -22,7 +22,8 @@ public class Lobby {
         newPlayer.sendMessage(new Message("showlobby", ""));
 
         Message playersMessage = getLobbyPlayersMessage();
-        players.forEach((uuid, player)-> player.sendMessage(playersMessage));
+        Message gamesMessage = getGamesMessage();
+        players.forEach((uuid, player)-> {player.sendMessage(playersMessage);player.sendMessage(gamesMessage);});
     }
 
     public synchronized void createGame(Player player){
@@ -54,14 +55,16 @@ public class Lobby {
         players.remove(removedPlayer.getUuid());
 
         Message playersMessage = getLobbyPlayersMessage();
-        players.forEach((uuid, player)-> player.sendMessage(playersMessage));
+        Message gamesMessage = getGamesMessage();
+        players.forEach((uuid, player)-> {player.sendMessage(playersMessage);player.sendMessage(gamesMessage);});
     }
 
     public synchronized void removeGame(Game removedGame){
         games.remove(removedGame.getUuid());
 
+        Message playersMessage = getLobbyPlayersMessage();
         Message gamesMessage = getGamesMessage();
-        players.forEach((uuid, game)-> game.sendMessage(gamesMessage));
+        players.forEach((uuid, player)-> {player.sendMessage(playersMessage);player.sendMessage(gamesMessage);});
     }
 
     public synchronized void addPlayerToGame(Player player, String gameUuid) throws GameNotExistingException, NoSlotsAvailableException {
@@ -111,6 +114,8 @@ public class Lobby {
         games.forEach((uuid, game) -> {
             stringBuilder.append(",");
             stringBuilder.append(game.getUuid().toString());
+            stringBuilder.append(";");
+            stringBuilder.append(game.getDescription());
         });
         return new Message("games", stringBuilder.toString().substring(1));
     }

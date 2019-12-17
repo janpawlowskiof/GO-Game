@@ -41,7 +41,6 @@ public class GameLogicTest {
         testGameLogic.setPawn(3, 2, GamePawnType.Black);
         testGameLogic.setPawn(3, 3, GamePawnType.White);
         testGameLogic.setPawn(3, 2, GamePawnType.Black);
-
     }
 
     @Test
