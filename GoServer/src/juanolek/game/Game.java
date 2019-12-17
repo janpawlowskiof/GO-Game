@@ -1,9 +1,6 @@
 package juanolek.game;
 
-import juanolek.GamePlayerStrategy;
-import juanolek.Lobby;
-import juanolek.Message;
-import juanolek.Player;
+import juanolek.*;
 import juanolek.exceptions.InvalidMoveException;
 import juanolek.exceptions.NoSlotsAvailableException;
 import juanolek.exceptions.TrashDataException;
@@ -53,8 +50,12 @@ public class Game implements IEndGameHandler{
                     if(playerBlack != null) playerBlack.sendMessage(message);
                 }
             }
+
+            if(player == playerWhite) playerBlack.sendMessage(new Message("yourturn", ""));
+            else playerWhite.sendMessage(new Message("yourturn", ""));
+
         } catch (InvalidMoveException e) {
-            player.sendMessage(new Message("Info", e.getMessage()));
+            player.sendMessage(new Message("InvalidMoveInfo", e.getMessage()));
         } catch (TrashDataException e) {
             System.out.println("Trash data received");
         }
@@ -63,12 +64,16 @@ public class Game implements IEndGameHandler{
     public void pass(Player player){
         try{
             if(player == playerWhite){
-                if(gameLogic.pass(GamePawnType.White))
+                if(gameLogic.pass(GamePawnType.White)){
                     playerBlack.sendMessage(new Message("info", "Your opponent passed"));
+                    playerBlack.sendMessage(new Message("yourturn", ""));
+                }
             }
             else{
-                if (gameLogic.pass((GamePawnType.Black)))
+                if (gameLogic.pass((GamePawnType.Black))){
                     playerWhite.sendMessage(new Message("info", "Your opponent passed"));
+                    playerWhite.sendMessage(new Message("yourturn", ""));
+                }
             }
         }
         catch(InvalidMoveException ex){
@@ -102,12 +107,14 @@ public class Game implements IEndGameHandler{
         if(playerWhite != null){
             if(notifyPlayers)
                 playerWhite.sendMessage(new Message("Info", "Game session has been closed"));
-            Lobby.getInstance().addPlayer(playerWhite);
+            if(!(playerWhite instanceof PlayerBot))
+                Lobby.getInstance().addPlayer(playerWhite);
         }
         if(playerBlack != null){
             if(notifyPlayers)
                 playerBlack.sendMessage(new Message("Info", "Game session has been closed"));
-            Lobby.getInstance().addPlayer(playerBlack);
+            if(!(playerBlack instanceof PlayerBot))
+                Lobby.getInstance().addPlayer(playerBlack);
         }
         Lobby.getInstance().removeGame(this);
     }

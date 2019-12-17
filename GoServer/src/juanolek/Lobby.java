@@ -28,7 +28,7 @@ public class Lobby {
         });
     }
 
-    public synchronized void createGame(Player player){
+    public synchronized Game createGame(Player player){
         removePlayer(player);
         Game newGame = new Game(19, player);
         games.put(newGame.getUuid(), newGame);
@@ -37,6 +37,26 @@ public class Lobby {
         players.forEach((uuid, game)->{
             game.sendMessage(gamesMessage);
         });
+        return newGame;
+    }
+
+    public synchronized Game createGameWithBot(Player player){
+        removePlayer(player);
+        int size = 19;
+        Game newGame = new Game(size, player);
+        try {
+            System.out.println("Creating a new game with bot");
+            newGame.addPlayer(new PlayerBot(newGame, size));
+        } catch (NoSlotsAvailableException e) {
+            System.out.println("Fatal game error somehow");
+        }
+        games.put(newGame.getUuid(), newGame);
+
+        Message gamesMessage = getGamesMessage();
+        players.forEach((uuid, game)->{
+            game.sendMessage(gamesMessage);
+        });
+        return newGame;
     }
 
     public synchronized void removePlayer(Player removedPlayer){

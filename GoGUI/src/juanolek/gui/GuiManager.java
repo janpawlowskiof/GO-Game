@@ -61,7 +61,8 @@ public class GuiManager implements IMessageReceiver {
         else if(message.getHeader().equals("showlogin")){
             showLoginWindow();
         }
-        else if(message.getHeader().toLowerCase().equals("info")){
+        else if(message.getHeader().toLowerCase().equals("info") ||
+                message.getHeader().toLowerCase().equals("invalidmoveinfo") ){
             JOptionPane.showMessageDialog(viewFrameReceiver, message.getValue());
         }
         else{

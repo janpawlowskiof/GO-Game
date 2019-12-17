@@ -5,15 +5,14 @@ import java.util.UUID;
 
 public class Player implements IMessageReceiver{
 
-    private IConnectionManager connectionManager;
-    private IPlayerStrategy playerStrategy;
-    private String nick;
-    private UUID uuid;
-    private static ArrayList<String> usedNicks;
+    protected IConnectionManager connectionManager;
+    protected IPlayerStrategy playerStrategy;
+    protected String nick;
+    protected UUID uuid;
+    protected static ArrayList<String> usedNicks;
     static{
         usedNicks = new ArrayList<>();
     }
-
 
     public Player(IConnectionManager connectionManager){
         this.connectionManager = connectionManager;

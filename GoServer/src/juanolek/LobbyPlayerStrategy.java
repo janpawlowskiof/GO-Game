@@ -2,6 +2,7 @@ package juanolek;
 
 import juanolek.exceptions.GameNotExistingException;
 import juanolek.exceptions.NoSlotsAvailableException;
+import juanolek.game.Game;
 
 public class LobbyPlayerStrategy implements IPlayerStrategy {
 
@@ -19,6 +20,9 @@ public class LobbyPlayerStrategy implements IPlayerStrategy {
         }
         else if(message.getHeader().equals("creategame")){
             Lobby.getInstance().createGame(sender);
+        }
+        else if(message.getHeader().equals("creategamewithbot")){
+            Lobby.getInstance().createGameWithBot(sender);
         }
         else if(message.getHeader().equals("joingame")){
             try {
