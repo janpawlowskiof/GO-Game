@@ -1,21 +1,23 @@
 package juanolek.game;
 
-import juanolek.Player;
 import juanolek.exceptions.InvalidMoveException;
 import juanolek.exceptions.TrashDataException;
 import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.List;
 
-public class GameLogic{
+class GameLogic{
 
-    int size;
-    GamePawnType makingMove;
-    GameTile[][] tiles;
-    int lastWhiteX = -1, lastWhiteY = -1, lastBlackX = -1, lastBlackY = -1;
-    int whitePoints = 0, blackPoints = 0;
-    boolean lastMovePassed = false;
-    IEndGameHandler endGameHandler;
+    private final int size;
+    private GamePawnType makingMove;
+    private final GameTile[][] tiles;
+    private int lastWhiteX = -1;
+    private int lastWhiteY = -1;
+    private int lastBlackX = -1;
+    private int lastBlackY = -1;
+    private int whitePoints = 0;
+    private int blackPoints = 0;
+    private boolean lastMovePassed = false;
+    private final IEndGameHandler endGameHandler;
 
     GameLogic(IEndGameHandler endGameHandler, int size){
         this.endGameHandler = endGameHandler;
@@ -136,7 +138,7 @@ public class GameLogic{
     //active when a player attempts to pass
     public boolean pass(GamePawnType type) throws InvalidMoveException{
         if(type == makingMove){
-            if(lastMovePassed == true){
+            if(lastMovePassed){
                 endGame();
                 return false;
             }
@@ -152,7 +154,7 @@ public class GameLogic{
     }
 
     //check if a tile counts area of "type"
-    public boolean checkFinalTileType(int x, int y, ArrayList<GameTile> visited, GamePawnType type){
+    private boolean checkFinalTileType(int x, int y, ArrayList<GameTile> visited, GamePawnType type){
         if(x < 0 || x >= size || y < 0 || y >= size)
             return true;
 
@@ -175,7 +177,7 @@ public class GameLogic{
     }
 
     //checks if a tile in the endgame counts as a white, black or no-mans area
-    public GamePawnType assignFinalTileType(int x, int y){
+    private GamePawnType assignFinalTileType(int x, int y){
         if(tiles[x][y].type != GamePawnType.Empty){
             return GamePawnType.Empty;
         }
@@ -189,7 +191,7 @@ public class GameLogic{
     }
 
     //called on game end
-    public void endGame(){
+    private void endGame(){
         System.out.println("Game has ended");
 
         ArrayList<GameBoardChange> boardChanges = new ArrayList<>();

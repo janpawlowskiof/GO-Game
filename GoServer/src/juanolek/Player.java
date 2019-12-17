@@ -5,11 +5,11 @@ import java.util.UUID;
 
 public class Player implements IMessageReceiver{
 
-    protected IConnectionManager connectionManager;
-    protected IPlayerStrategy playerStrategy;
-    protected String nick;
-    protected UUID uuid;
-    protected static ArrayList<String> usedNicks;
+    IConnectionManager connectionManager;
+    private IPlayerStrategy playerStrategy;
+    private String nick;
+    private UUID uuid;
+    private static final ArrayList<String> usedNicks;
     static{
         usedNicks = new ArrayList<>();
     }
@@ -17,7 +17,7 @@ public class Player implements IMessageReceiver{
     public Player(IConnectionManager connectionManager){
         this.connectionManager = connectionManager;
         this.uuid = UUID.randomUUID();
-        setNick("GenericNick");
+        setNick();
     }
 
     public UUID getUuid(){
@@ -26,20 +26,20 @@ public class Player implements IMessageReceiver{
     public String getNick(){
         return nick;
     }
-    public void setNick(String nick) {
+    private void setNick() {
         usedNicks.remove(this.nick);
-        if(!usedNicks.contains(nick)){
-            this.nick = nick;
+        if(!usedNicks.contains("GenericNick")){
+            this.nick = "GenericNick";
         }
         else{
             int i = 0;
-            while(usedNicks.contains(nick+i)){
+            while(usedNicks.contains("GenericNick" +i)){
                 i++;
             }
-            this.nick = nick+i;
+            this.nick = "GenericNick" +i;
         }
         usedNicks.add(this.nick);
-        System.out.println("Your nick has been set to " + nick);
+        System.out.println("Your nick has been set to " + "GenericNick");
     }
 
     public void startReceivingMessages(){

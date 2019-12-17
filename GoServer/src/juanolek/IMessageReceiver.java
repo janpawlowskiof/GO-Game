@@ -1,5 +1,5 @@
 package juanolek;
 
-public interface IMessageReceiver {
+interface IMessageReceiver {
     void receive(Message message);
 }

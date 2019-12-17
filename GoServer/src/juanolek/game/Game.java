@@ -12,8 +12,8 @@ public class Game implements IEndGameHandler{
 
     private Player playerWhite = null;
     private Player playerBlack = null;
-    private GameLogic gameLogic;
-    private UUID uuid;
+    private final GameLogic gameLogic;
+    private final UUID uuid;
 
     public Game(int size, Player player){
         this.uuid = UUID.randomUUID();

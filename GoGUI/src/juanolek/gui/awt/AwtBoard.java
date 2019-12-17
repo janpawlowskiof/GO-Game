@@ -3,8 +3,6 @@ import juanolek.client.Message;
 import juanolek.gui.GuiManager;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Iterator;
 
 public class AwtBoard extends ReceiverFrame{
@@ -14,7 +12,7 @@ public class AwtBoard extends ReceiverFrame{
     public static final int TILE_SIZE = 40;
     public static final int BORDER_SIZE = TILE_SIZE;
     public static final int CONSTANT =15;
-    private GuiManager guiManager;
+    private final GuiManager guiManager;
     private final BoardPanel boardPanel = new BoardPanel(this);
     private final JLabel opponentInfo;
     private final JLabel colorInfo;

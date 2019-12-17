@@ -2,8 +2,8 @@ package juanolek;
 
 public class Message {
 
-    private String header;
-    private String value;
+    private final String header;
+    private final String value;
 
     public Message(String header, String value){
         this.header = header.toLowerCase();

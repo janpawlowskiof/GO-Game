@@ -4,7 +4,6 @@ import juanolek.exceptions.GameNotExistingException;
 import juanolek.exceptions.NoSlotsAvailableException;
 import juanolek.game.Game;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -13,8 +12,8 @@ public class Lobby {
     private static Lobby instance = null;
     private Lobby(){}
 
-    private HashMap<UUID, Player> players = new HashMap<>();
-    private HashMap<UUID, Game> games = new HashMap<>();
+    private final HashMap<UUID, Player> players = new HashMap<>();
+    private final HashMap<UUID, Game> games = new HashMap<>();
 
     public synchronized void addPlayer(Player newPlayer)
     {
@@ -23,24 +22,19 @@ public class Lobby {
         newPlayer.sendMessage(new Message("showlobby", ""));
 
         Message playersMessage = getLobbyPlayersMessage();
-        players.forEach((uuid, player)->{
-            player.sendMessage(playersMessage);
-        });
+        players.forEach((uuid, player)-> player.sendMessage(playersMessage));
     }
 
-    public synchronized Game createGame(Player player){
+    public synchronized void createGame(Player player){
         removePlayer(player);
         Game newGame = new Game(19, player);
         games.put(newGame.getUuid(), newGame);
 
         Message gamesMessage = getGamesMessage();
-        players.forEach((uuid, game)->{
-            game.sendMessage(gamesMessage);
-        });
-        return newGame;
+        players.forEach((uuid, game)-> game.sendMessage(gamesMessage));
     }
 
-    public synchronized Game createGameWithBot(Player player){
+    public synchronized void createGameWithBot(Player player){
         removePlayer(player);
         int size = 19;
         Game newGame = new Game(size, player);
@@ -53,28 +47,21 @@ public class Lobby {
         games.put(newGame.getUuid(), newGame);
 
         Message gamesMessage = getGamesMessage();
-        players.forEach((uuid, game)->{
-            game.sendMessage(gamesMessage);
-        });
-        return newGame;
+        players.forEach((uuid, game)-> game.sendMessage(gamesMessage));
     }
 
     public synchronized void removePlayer(Player removedPlayer){
         players.remove(removedPlayer.getUuid());
 
         Message playersMessage = getLobbyPlayersMessage();
-        players.forEach((uuid, player)->{
-            player.sendMessage(playersMessage);
-        });
+        players.forEach((uuid, player)-> player.sendMessage(playersMessage));
     }
 
     public synchronized void removeGame(Game removedGame){
         games.remove(removedGame.getUuid());
 
         Message gamesMessage = getGamesMessage();
-        players.forEach((uuid, game)->{
-            game.sendMessage(gamesMessage);
-        });
+        players.forEach((uuid, game)-> game.sendMessage(gamesMessage));
     }
 
     public synchronized void addPlayerToGame(Player player, String gameUuid) throws GameNotExistingException, NoSlotsAvailableException {

@@ -3,15 +3,13 @@ package juanolek;
 import juanolek.game.Game;
 import juanolek.game.GamePawnType;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class PlayerBot extends Player {
 
-    private GamePawnType[][] tiles;
-    Game game;
-    int size;
+    private final GamePawnType[][] tiles;
+    private final Game game;
+    private final int size;
 //    private IMessageReceiver messageReceiver;
 
     public PlayerBot(Game game, int size) {
@@ -31,15 +29,14 @@ public class PlayerBot extends Player {
             }
     }
 
-    Random generator = new Random();
-    int searchX = 0;
-    int searchY = 0;
-    public void makeMove(int i){
+    private final Random generator = new Random();
+
+    private void makeMove(int i){
         System.out.println("Bot moves now");
-        int x = 0, y = 0;
+        int x, y;
         if(i < 1){
-            searchX = 0;
-            searchY = 0;
+            int searchX = 0;
+            int searchY = 0;
             x = generator.nextInt(size);
             y = generator.nextInt(size);
         }
@@ -50,41 +47,46 @@ public class PlayerBot extends Player {
         game.setPawn(x, y, this);
     }
 
-    int i = 0;
+    private int i = 0;
 
     @Override
     public void sendMessage(Message message) {
         System.out.println("Bot received message " + message.toString());
 
-        if(message.getHeader().equals("setwhitepawn")){
-            int x = Integer.parseInt(message.getValue().split(",")[0]);
-            int y = Integer.parseInt(message.getValue().split(",")[1]);
-            tiles[x][y] = GamePawnType.White;
-        }
-        else if(message.getHeader().equals("setblackpawn")){
-            int x = Integer.parseInt(message.getValue().split(",")[0]);
-            int y = Integer.parseInt(message.getValue().split(",")[1]);
-            tiles[x][y] = GamePawnType.Black;
-        }
-        else if(message.getHeader().equals("deletepawn")){
-            int x = Integer.parseInt(message.getValue().split(",")[0]);
-            int y = Integer.parseInt(message.getValue().split(",")[1]);
-            tiles[x][y] = GamePawnType.Empty;
-        }
-        else if(message.getHeader().equals("yourturn")){
-            System.out.println("its bots turn");
-            i = 0;
-            makeMove(i);
-        }
-        else if(message.getHeader().equals("invalidmoveinfo")){
-            i++;
-            makeMove(i);
+        switch (message.getHeader()) {
+            case "setwhitepawn": {
+                int x = Integer.parseInt(message.getValue().split(",")[0]);
+                int y = Integer.parseInt(message.getValue().split(",")[1]);
+                tiles[x][y] = GamePawnType.White;
+                break;
+            }
+            case "setblackpawn": {
+                int x = Integer.parseInt(message.getValue().split(",")[0]);
+                int y = Integer.parseInt(message.getValue().split(",")[1]);
+                tiles[x][y] = GamePawnType.Black;
+                break;
+            }
+            case "deletepawn": {
+                int x = Integer.parseInt(message.getValue().split(",")[0]);
+                int y = Integer.parseInt(message.getValue().split(",")[1]);
+                tiles[x][y] = GamePawnType.Empty;
+                break;
+            }
+            case "yourturn":
+                System.out.println("its bots turn");
+                i = 0;
+                makeMove(i);
+                break;
+            case "invalidmoveinfo":
+                i++;
+                makeMove(i);
+                break;
         }
     }
 
-    public class LazyConnectionManager implements IConnectionManager{
+    public static class LazyConnectionManager implements IConnectionManager{
         @Override
-        public void disconnect() throws IOException { }
+        public void disconnect() { }
         @Override
         public void sendMessage(Message message) { }
         @Override

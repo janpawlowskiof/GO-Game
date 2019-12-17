@@ -4,7 +4,7 @@ import juanolek.game.Game;
 
 public class GamePlayerStrategy implements IPlayerStrategy {
 
-    private Game game;
+    private final Game game;
 
     public GamePlayerStrategy(Game game){
         this.game = game;
@@ -12,19 +12,21 @@ public class GamePlayerStrategy implements IPlayerStrategy {
 
     @Override
     public void handleMessage(Message message, Player sender) {
-        if(message.getHeader().equals("abortgame")){
-            game.endSession(true);
-        }
-        else if(message.getHeader().equals("pass")){
-            game.pass(sender);
-        }
-        else if(message.getHeader().equals("tileselected")){
-            int x = Integer.parseInt(message.getValue().split(",")[0]);
-            int y = Integer.parseInt(message.getValue().split(",")[1]);
-            game.setPawn(x, y, sender);
-        }
-        else{
-            System.out.println("Header " + message.getHeader() + " received in game but not implemented");
+        switch (message.getHeader()) {
+            case "abortgame":
+                game.endSession(true);
+                break;
+            case "pass":
+                game.pass(sender);
+                break;
+            case "tileselected":
+                int x = Integer.parseInt(message.getValue().split(",")[0]);
+                int y = Integer.parseInt(message.getValue().split(",")[1]);
+                game.setPawn(x, y, sender);
+                break;
+            default:
+                System.out.println("Header " + message.getHeader() + " received in game but not implemented");
+                break;
         }
     }
 

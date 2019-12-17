@@ -5,8 +5,6 @@ import juanolek.gui.GuiManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class AwtLogin extends ReceiverFrame {
 

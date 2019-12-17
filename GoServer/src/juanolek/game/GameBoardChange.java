@@ -2,10 +2,10 @@ package juanolek.game;
 
 public class GameBoardChange {
 
-    private ChangeType changeType;
-    private GamePawnType pawnType;
-    private int x;
-    private int y;
+    private final ChangeType changeType;
+    private final GamePawnType pawnType;
+    private final int x;
+    private final int y;
 
     public GamePawnType getPawnType() {
         return pawnType;

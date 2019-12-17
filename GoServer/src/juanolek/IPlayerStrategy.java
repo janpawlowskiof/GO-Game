@@ -1,6 +1,6 @@
 package juanolek;
 
-public interface IPlayerStrategy {
+interface IPlayerStrategy {
     void handleMessage(Message message, Player sender);
     void forceQuit(Player sender);
 }

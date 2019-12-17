@@ -1,13 +1,10 @@
 package juanolek;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 
-public class ConnectionGreeter extends Thread {
+class ConnectionGreeter extends Thread {
 
-    public boolean exitFlag = false;
-    private IConnectionManagerFactory connectionManagerFactory;
+    private final IConnectionManagerFactory connectionManagerFactory;
 
     public ConnectionGreeter(IConnectionManagerFactory connectionManagerFactory){
         this.connectionManagerFactory = connectionManagerFactory;
@@ -16,6 +13,7 @@ public class ConnectionGreeter extends Thread {
     @Override
     public void run(){
 
+        boolean exitFlag = false;
         while(!exitFlag){
             try {
                 System.out.println("Waiting for players...");

@@ -2,7 +2,7 @@ package juanolek;
 
 import java.io.IOException;
 
-public class Main {
+class Main {
     public static void main(String[] args){
         System.out.println("Starting server...\n");
 
