@@ -4,6 +4,9 @@ import juanolek.*;
 import juanolek.exceptions.InvalidMoveException;
 import juanolek.exceptions.NoSlotsAvailableException;
 import juanolek.exceptions.TrashDataException;
+import juanolek.player.GamePlayerStrategy;
+import juanolek.player.Player;
+import juanolek.player.PlayerBot;
 
 import java.util.List;
 import java.util.UUID;

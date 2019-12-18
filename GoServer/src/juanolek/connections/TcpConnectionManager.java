@@ -1,4 +1,7 @@
-package juanolek;
+package juanolek.connections;
+
+import juanolek.IMessageReceiver;
+import juanolek.Message;
 
 import java.io.*;
 import java.net.Socket;

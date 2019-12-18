@@ -1,9 +1,14 @@
-package juanolek;
+package juanolek.player;
+
+import juanolek.IMessageReceiver;
+import juanolek.IPlayerStrategy;
+import juanolek.Message;
+import juanolek.connections.IConnectionManager;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Player implements IMessageReceiver{
+public class Player implements IMessageReceiver {
 
     IConnectionManager connectionManager;
     private IPlayerStrategy playerStrategy;
@@ -14,10 +19,10 @@ public class Player implements IMessageReceiver{
         usedNicks = new ArrayList<>();
     }
 
-    public Player(IConnectionManager connectionManager){
+    public Player(String nick, IConnectionManager connectionManager){
         this.connectionManager = connectionManager;
         this.uuid = UUID.randomUUID();
-        setNick();
+        setNick(nick);
     }
 
     public UUID getUuid(){
@@ -26,17 +31,17 @@ public class Player implements IMessageReceiver{
     public String getNick(){
         return nick;
     }
-    private void setNick() {
+    private void setNick(String nick) {
         usedNicks.remove(this.nick);
-        if(!usedNicks.contains("GenericNick")){
-            this.nick = "GenericNick";
+        if(!usedNicks.contains(nick)){
+            this.nick = nick;
         }
         else{
             int i = 0;
-            while(usedNicks.contains("GenericNick" +i)){
+            while(usedNicks.contains(nick +i)){
                 i++;
             }
-            this.nick = "GenericNick" +i;
+            this.nick = nick+i;
         }
         usedNicks.add(this.nick);
         System.out.println("Your nick has been set to " + "GenericNick");

@@ -20,6 +20,7 @@ public class AwtLobby extends ReceiverFrame {
         this.setResizable(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
+        setTitle("Go Lobby");
 
         this.setLayout(new BorderLayout());
         JButton joinButton = new JButton();

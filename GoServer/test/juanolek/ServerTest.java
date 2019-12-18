@@ -1,5 +1,7 @@
 package juanolek;
 
+import juanolek.connections.ConnectionGreeter;
+import juanolek.connections.TcpConnectionManagerFactory;
 import org.junit.Test;
 
 import java.io.*;
@@ -20,12 +22,16 @@ public class ServerTest {
         randomBytes[499]='\n';
         String s = new String(randomBytes);
 
+        System.out.println("Creating connection greeter...");
         ConnectionGreeter connectionGreeter = null;
         connectionGreeter = new ConnectionGreeter(new TcpConnectionManagerFactory(6666));
+        System.out.println("Done");
+
         connectionGreeter.start();
 
         Socket testSocket = new Socket("localhost",6666);
 
+        System.out.println("Creting in and out readers");
         BufferedReader in = new BufferedReader( new InputStreamReader( testSocket.getInputStream()) );
         DataOutputStream out = new DataOutputStream(testSocket.getOutputStream());
 
@@ -39,7 +45,7 @@ public class ServerTest {
         in.close();
         out.close();
         testSocket.close();
-
+        connectionGreeter.close();
     }
 
 
@@ -69,7 +75,7 @@ public class ServerTest {
         bufferedReader.close();
         bufferedWriter.close();
         socket1.close();
-
+        connectionGreeter.close();
     }
 
 }

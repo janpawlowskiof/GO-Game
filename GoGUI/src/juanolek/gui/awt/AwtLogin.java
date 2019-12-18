@@ -19,6 +19,7 @@ public class AwtLogin extends ReceiverFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         setLocationRelativeTo(null);
+        setTitle("Go Login");
 
         setLayout(new FlowLayout());
         setLayout(null);

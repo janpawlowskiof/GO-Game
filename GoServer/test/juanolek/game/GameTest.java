@@ -1,14 +1,10 @@
 package juanolek.game;
 
 import juanolek.*;
-import juanolek.exceptions.InvalidMoveException;
 import juanolek.exceptions.NoSlotsAvailableException;
-import juanolek.exceptions.TrashDataException;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
-import static org.junit.Assert.*;
+import juanolek.player.Player;
+import juanolek.player.PlayerBot;
 
 public class GameTest {
 
@@ -16,7 +12,7 @@ public class GameTest {
     private  class TestPlayer extends Player {
 
         public TestPlayer() {
-            super(null);
+            super("Test",null);
         }
 
         @Override

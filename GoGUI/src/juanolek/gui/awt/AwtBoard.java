@@ -28,6 +28,7 @@ public class AwtBoard extends ReceiverFrame{
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setTitle("Go Board");
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(6,1));

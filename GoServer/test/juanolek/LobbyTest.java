@@ -4,6 +4,7 @@ import juanolek.exceptions.GameNotExistingException;
 import juanolek.exceptions.NoSlotsAvailableException;
 import juanolek.game.Game;
 import org.junit.Test;
+import juanolek.player.Player;
 
 import static org.junit.Assert.*;
 
@@ -12,7 +13,7 @@ public class LobbyTest {
 
     private class PlayerMock extends Player {
         public PlayerMock() {
-            super(null);
+            super("Test", null);
         }
         @Override
         public void startReceivingMessages(){}

@@ -1,5 +1,8 @@
-package juanolek;
+package juanolek.player;
 
+import juanolek.IMessageReceiver;
+import juanolek.Message;
+import juanolek.connections.IConnectionManager;
 import juanolek.game.Game;
 import juanolek.game.GamePawnType;
 
@@ -13,7 +16,7 @@ public class PlayerBot extends Player {
 //    private IMessageReceiver messageReceiver;
 
     public PlayerBot(Game game, int size) {
-        super(null);
+        super("Bot", null);
         this.game = game;
         this.size = size;
         System.out.println("Creating bot");
@@ -34,7 +37,7 @@ public class PlayerBot extends Player {
     private void makeMove(int i){
         System.out.println("Bot moves now");
         int x, y;
-        if(i < 1){
+        if(i < 2){
             int searchX = 0;
             int searchY = 0;
             x = generator.nextInt(size);
@@ -84,7 +87,7 @@ public class PlayerBot extends Player {
         }
     }
 
-    public static class LazyConnectionManager implements IConnectionManager{
+    public static class LazyConnectionManager implements IConnectionManager {
         @Override
         public void disconnect() { }
         @Override

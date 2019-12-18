@@ -1,5 +1,7 @@
-package juanolek;
+package juanolek.player;
 
+import juanolek.IPlayerStrategy;
+import juanolek.Message;
 import juanolek.game.Game;
 
 public class GamePlayerStrategy implements IPlayerStrategy {

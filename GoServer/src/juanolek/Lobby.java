@@ -3,6 +3,9 @@ package juanolek;
 import juanolek.exceptions.GameNotExistingException;
 import juanolek.exceptions.NoSlotsAvailableException;
 import juanolek.game.Game;
+import juanolek.player.LobbyPlayerStrategy;
+import juanolek.player.Player;
+import juanolek.player.PlayerBot;
 
 import java.util.HashMap;
 import java.util.UUID;

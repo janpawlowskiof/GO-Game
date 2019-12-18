@@ -1,32 +1,40 @@
-package juanolek;
+package juanolek.connections;
+
+import juanolek.Lobby;
+import juanolek.player.Player;
 
 import java.io.IOException;
 
-class ConnectionGreeter extends Thread {
+public class ConnectionGreeter extends Thread {
 
     private final IConnectionManagerFactory connectionManagerFactory;
+    private boolean exitFlag = false;
 
     public ConnectionGreeter(IConnectionManagerFactory connectionManagerFactory){
         this.connectionManagerFactory = connectionManagerFactory;
     }
 
+    public void close(){
+        exitFlag = true;
+        connectionManagerFactory.closeConnections();
+    }
+
     @Override
     public void run(){
 
-        boolean exitFlag = false;
         while(!exitFlag){
             try {
                 System.out.println("Waiting for players...");
                 IConnectionManager connectionManager = connectionManagerFactory.getConnectionManager();
-                Player newPlayer = new Player(connectionManager);
+                if(connectionManager == null)
+                    return;
+                Player newPlayer = new Player("Player", connectionManager);
                 Lobby.getInstance().addPlayer(newPlayer);
                 newPlayer.startReceivingMessages();
-                System.out.println("Past establishing conection");
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
+
     }
 }

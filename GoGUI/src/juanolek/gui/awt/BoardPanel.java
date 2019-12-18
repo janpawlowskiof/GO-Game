@@ -53,7 +53,8 @@ class BoardPanel extends JPanel {
                     + BORDER_SIZE, TILE_SIZE * N_OF_TILES + BORDER_SIZE);
         }
 
-        for(Pawn p : pawns){
+        for(int i = 0; i < pawns.size(); i++){
+            Pawn p = pawns.get(i);
             if(p.getColor() == Color.BLACK){
                 g2.setColor(Color.BLACK);
                 g2.fillOval(p.getX()*TILE_SIZE+BORDER_SIZE-CONSTANT,p.getY()*TILE_SIZE+BORDER_SIZE-CONSTANT,30,30);

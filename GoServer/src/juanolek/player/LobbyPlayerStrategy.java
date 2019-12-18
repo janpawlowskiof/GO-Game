@@ -1,5 +1,8 @@
-package juanolek;
+package juanolek.player;
 
+import juanolek.IPlayerStrategy;
+import juanolek.Lobby;
+import juanolek.Message;
 import juanolek.exceptions.GameNotExistingException;
 import juanolek.exceptions.NoSlotsAvailableException;
 
