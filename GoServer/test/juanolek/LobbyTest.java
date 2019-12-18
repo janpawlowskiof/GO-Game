@@ -1,13 +1,9 @@
-import juanolek.Lobby;
-import juanolek.Message;
-import juanolek.Player;
-import juanolek.PlayerBot;
+package juanolek;
+
 import juanolek.exceptions.GameNotExistingException;
 import juanolek.exceptions.NoSlotsAvailableException;
 import juanolek.game.Game;
 import org.junit.Test;
-
-import java.util.UUID;
 
 import static org.junit.Assert.*;
 
