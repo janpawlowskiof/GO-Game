@@ -154,7 +154,7 @@ class GameLogic{
     }
 
     //check if a tile counts area of "type"
-    private boolean checkFinalTileType(int x, int y, ArrayList<GameTile> visited, GamePawnType type){
+    protected boolean checkFinalTileType(int x, int y, ArrayList<GameTile> visited, GamePawnType type){
         if(x < 0 || x >= size || y < 0 || y >= size)
             return true;
 
@@ -177,7 +177,7 @@ class GameLogic{
     }
 
     //checks if a tile in the endgame counts as a white, black or no-mans area
-    private GamePawnType assignFinalTileType(int x, int y){
+    protected GamePawnType assignFinalTileType(int x, int y){
         if(tiles[x][y].type != GamePawnType.Empty){
             return GamePawnType.Empty;
         }

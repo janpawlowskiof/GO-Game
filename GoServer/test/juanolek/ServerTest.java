@@ -18,6 +18,7 @@ public class ServerTest {
         byte[] randomBytes = new byte[500];
         randomByte.nextBytes(randomBytes);
         randomBytes[499]='\n';
+        String s = new String(randomBytes);
 
         ConnectionGreeter connectionGreeter = null;
         connectionGreeter = new ConnectionGreeter(new TcpConnectionManagerFactory(6666));

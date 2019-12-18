@@ -6,6 +6,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 public class GameLogicTest {
@@ -72,10 +74,60 @@ public class GameLogicTest {
         GameLogic testGameLogic = new GameLogic(endGameHandler,19);
         testGameLogic.setPawn(1, 1, GamePawnType.Black);
         testGameLogic.setPawn(12, 1, GamePawnType.White);
+
+    }
+
+    @Test
+    public void testPass() throws InvalidMoveException, TrashDataException {
+        expectedEx.expect(InvalidMoveException.class);
+        expectedEx.expectMessage("You can't pass when it's not you turn");
+
+        GameLogic testGameLogic = new GameLogic(endGameHandler,19);
+        testGameLogic.pass(GamePawnType.Black);
+
+        testGameLogic.setPawn(0,1,GamePawnType.White);
+        testGameLogic.setPawn(0,2,GamePawnType.Black);
+        testGameLogic.setPawn(1,1,GamePawnType.White);
+        testGameLogic.setPawn(0,0,GamePawnType.Black);
+        testGameLogic.pass(GamePawnType.White);
+        testGameLogic.pass(GamePawnType.Black);
+
+    }
+
+    @Test
+    public void testCheckFinalTileType() throws InvalidMoveException, TrashDataException {
+
+
+        GameLogic testGameLogic = new GameLogic(endGameHandler,19);
+        assertTrue(testGameLogic.checkFinalTileType(-1,-2,new ArrayList<>(),GamePawnType.White));
+
+        testGameLogic.setPawn(1,2,GamePawnType.White);
+        assertTrue(testGameLogic.checkFinalTileType(1,2,new ArrayList<>(),GamePawnType.White));
+        assertTrue(testGameLogic.checkFinalTileType(1,3,new ArrayList<>(),GamePawnType.White));
+
+
+    }
+
+    @Test
+    public void testAssignFinalTileType() throws InvalidMoveException, TrashDataException {
+
+        GameLogic testGameLogic = new GameLogic(endGameHandler,19);
+        testGameLogic.setPawn(2,2,GamePawnType.White);
+        assertEquals(GamePawnType.Empty,testGameLogic.assignFinalTileType(2,2));
+        assertEquals(GamePawnType.White,testGameLogic.assignFinalTileType(2,1));
+
+
     }
 
 
+    @Test
+    public void testEmptyPlayerSetPawn() throws InvalidMoveException, TrashDataException {
+        expectedEx.expect(TrashDataException.class);
 
+        GameLogic testGameLogic = new GameLogic(endGameHandler,19);
+        testGameLogic.setPawn(1,1,GamePawnType.Empty);
+
+    }
 
 
 }

@@ -1,6 +1,13 @@
 import juanolek.Lobby;
 import juanolek.Message;
 import juanolek.Player;
+import juanolek.PlayerBot;
+import juanolek.exceptions.GameNotExistingException;
+import juanolek.exceptions.NoSlotsAvailableException;
+import juanolek.game.Game;
+import org.junit.Test;
+
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -17,11 +24,22 @@ public class LobbyTest {
     }
 
     @org.junit.Test
-   public void testAddPlayer() {
-        Player testPlayer = new PlayerMock();
-        assertFalse(Lobby.getInstance().getLobbyPlayers().containsValue(testPlayer));
-        Lobby.getInstance().addPlayer(testPlayer);
-        assertTrue(Lobby.getInstance().getLobbyPlayers().containsValue(testPlayer));
+   public void testAddPlayer() throws NoSlotsAvailableException, GameNotExistingException {
+        Player testPlayer1 = new PlayerMock();
+        Player testPlayer2 = new PlayerMock();
+
+        //adding a player to lobby
+        assertFalse(Lobby.getInstance().getLobbyPlayers().containsValue(testPlayer1));
+        Lobby.getInstance().addPlayer(testPlayer1);
+        assertTrue(Lobby.getInstance().getLobbyPlayers().containsValue(testPlayer1));
+
+        //adding a player to game
+        Game testGame = new Game(19,testPlayer1);
+        String uuid = testGame.getUuid().toString();
+        Lobby.getInstance().getGames().put(testGame.getUuid(),testGame);
+        Lobby.getInstance().addPlayerToGame(testPlayer2,uuid );
+
+
     }
 
     @org.junit.Test
@@ -33,6 +51,14 @@ public class LobbyTest {
         assertFalse(Lobby.getInstance().getLobbyPlayers().containsValue(testPlayer));
     }
 
+    @Test
+    public void testRemoveGame(){
+
+        Player testPlayer = new PlayerMock();
+        Lobby.getInstance().removeGame(new Game(19,testPlayer));
+
+    }
+
     @org.junit.Test
    public void testRemovePlayer() {
         Player testPlayer = new PlayerMock();
@@ -41,5 +67,13 @@ public class LobbyTest {
         assertTrue(Lobby.getInstance().getLobbyPlayers().containsValue(testPlayer));
         Lobby.getInstance().removePlayer(testPlayer);
         assertFalse(Lobby.getInstance().getLobbyPlayers().containsValue(testPlayer));
+    }
+
+    @Test
+    public void testGameWithBot(){
+
+        Player testPlayer = new PlayerMock();
+        Lobby.getInstance().createGameWithBot(testPlayer);
+
     }
 }
