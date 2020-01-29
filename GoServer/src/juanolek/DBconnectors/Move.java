@@ -1,15 +1,13 @@
 package juanolek.DBconnectors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "moves")
 public class Move {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     int ID;
     @Column(name = "wsp_x")
@@ -19,9 +17,9 @@ public class Move {
     @Column(name = "color")
     String color;
     @Column(name = "Id_gry")
-    int gameId;
+    String gameId;
 
-    public Move(int x, int y, String color,int gameId){
+    public Move(int x, int y, String color,String gameId){
         this.x = x;
         this.color=color;
         this.y=y;

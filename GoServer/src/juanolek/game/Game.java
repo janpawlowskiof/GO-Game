@@ -1,6 +1,8 @@
 package juanolek.game;
 
 import juanolek.*;
+import juanolek.DBconnectors.Move;
+import juanolek.DBconnectors.MoveDAO;
 import juanolek.exceptions.InvalidMoveException;
 import juanolek.exceptions.NoSlotsAvailableException;
 import juanolek.exceptions.TrashDataException;
@@ -17,6 +19,7 @@ public class Game implements IEndGameHandler{
     private Player playerBlack = null;
     private final GameLogic gameLogic;
     private final UUID uuid;
+    MoveDAO moveDAO = new MoveDAO();
 
     public Game(int size, Player player){
         this.uuid = UUID.randomUUID();
@@ -48,11 +51,26 @@ public class Game implements IEndGameHandler{
             for(GameBoardChange boardChange : boardChanges){
                 if(boardChange.getChangeType() == GameBoardChange.ChangeType.Add){
                     Message message = new Message(boardChange.getPawnType() == GamePawnType.White ? "setWhitePawn" : "setBlackPawn", boardChange.getX()+","+boardChange.getY());
+
+                    if(boardChange.getPawnType().equals(GamePawnType.White)){
+                        Move newMove = new Move(boardChange.getX(),boardChange.getY(),"White",uuid.toString());
+                        moveDAO.persist(newMove);
+                    }
+
+                    if(boardChange.getPawnType().equals(GamePawnType.Black)){
+                        Move newMove = new Move(boardChange.getX(),boardChange.getY(),"Black",uuid.toString());
+                        moveDAO.persist(newMove);
+                    }
+
                     if(playerWhite != null) playerWhite.sendMessage(message);
                     if(playerBlack != null) playerBlack.sendMessage(message);
                 }
                 else if(boardChange.getChangeType() == GameBoardChange.ChangeType.Delete){
                     Message message = new Message("deletePawn", boardChange.getX() + "," + boardChange.getY());
+
+                    Move newMove = new Move(boardChange.getX(),boardChange.getY(),"Null",uuid.toString());
+                    moveDAO.persist(newMove);
+
                     System.out.println("Sending message after delete" + message);
                     if(playerWhite != null) playerWhite.sendMessage(message);
                     if(playerBlack != null) playerBlack.sendMessage(message);
